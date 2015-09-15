@@ -4,6 +4,72 @@ Syntax Guide
 
 Examples are mostly adapted from the Idris tutorial.
 
+Source File Structure
+---------------------
+
+Source files consist of:
+
+1. An optional :ref:`syntax-module-headers`.
+2. Zero or more :ref:`syntax-imports`.
+3. The file's content, which is a mix of :ref:`syntax-variables`,
+   :ref:`syntax-data-types`, :ref:`syntax-directives`, etc.
+
+.. Should that last bullet become more specific?  Terminologically I'm not even
+   certain what the top-level entities in an Idris file are properly called.
+
+For example:
+
+.. code:: idris
+
+    module MyModule   -- module header
+
+    import Data.Vect  -- an import
+
+    %default total    -- a directive
+
+    foo : Nat         -- a declaration
+    foo = 5
+
+.. _syntax-module-headers:
+
+Module Header
+~~~~~~~~~~~~~
+
+The module header appears at the top of the file.  Each file can contain only
+one module, but content within the file may be broken into multiple namespaces.
+
+Unlike most Idris declaration headers, the module header does not end in the
+keyword ``where``.
+
+A :ref:`docstring <syntax-comments>` can be placed before the module header to
+serve as module-level documentation.
+
+.. _syntax-imports:
+
+Imports
+~~~~~~~
+
+An *import* makes the names in another module available for use by the current
+module::
+
+    import Data.Vect
+
+The module's name can be used to *qualify* variables that are ambiguous, such
+as when a variable with the same name is defined in two imported modules.  Note
+that qualification is usually not required, as long as the compiler can resolve
+the ambiguity using types.
+
+Modules can be given aliases to make qualified uses more compact::
+
+    import Data.Vect as V
+
+Note that names made visible by import are not, by default, re-exported to
+users of the module being written.  This can be done using ``import public``::
+
+    import public Data.Vect
+
+.. _syntax-variables:
+
 Variables
 ---------
 
@@ -42,6 +108,8 @@ a more interesting example:
 
     MyListType : Type
     MyListType = List Int
+
+.. _syntax-data-types:
 
 Data types
 ~~~~~~~~~~
@@ -246,6 +314,8 @@ Options
 Misc
 ----
 
+.. _syntax-comments:
+
 Comments
 ~~~~~~~~
 
@@ -263,6 +333,8 @@ Multi line String literals
     foo = """
     this is a
     string literal"""
+
+.. _syntax-directives:
 
 Directives
 ----------
