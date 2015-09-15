@@ -6,7 +6,7 @@ This short guide contributed by a community member illustrates how to prove asso
 
 First we define a module ``Foo.idr``
 
-.. code-block:: idris
+.. code-block::
 
     module Foo
 

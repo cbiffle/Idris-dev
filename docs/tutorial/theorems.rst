@@ -11,7 +11,7 @@ Idris allows propositional equalities to be declared, allowing theorems about
 programs to be stated and proved. Equality is built in, but conceptually
 has the following definition:
 
-.. code-block:: idris
+.. code-block::
 
     data (=) : a -> b -> Type where
        Refl : x = x
@@ -20,7 +20,7 @@ Equalities can be proposed between any values of any types, but the only
 way to construct a proof of equality is if values actually are equal.
 For example:
 
-.. code-block:: idris
+.. code-block::
 
     fiveIsFive : 5 = 5
     fiveIsFive = Refl
@@ -40,7 +40,7 @@ Section :ref:`sect-totality` for more details). We can therefore use the
 empty type to prove that something is impossible, for example zero is
 never equal to a successor:
 
-.. code-block:: idris
+.. code-block::
 
     disjoint : (n : Nat) -> Z = S n -> Void
     disjoint n p = replace {P = disjointTy} p ()
@@ -59,7 +59,7 @@ Once we have an element of the empty type, we can prove anything.
 ``void`` is defined in the library, to assist with proofs by
 contradiction.
 
-.. code-block:: idris
+.. code-block::
 
     void : Void -> a
 
@@ -70,7 +70,7 @@ When type checking dependent types, the type itself gets *normalised*.
 So imagine we want to prove the following theorem about the reduction
 behaviour of ``plus``:
 
-.. code-block:: idris
+.. code-block::
 
     plusReduces : (n:Nat) -> plus Z n = n
 
@@ -84,7 +84,7 @@ We won’t go into details here, but the Curry-Howard correspondence [1]_
 explains this relationship. The proof itself is trivial, because
 ``plus Z n`` normalises to ``n`` by the definition of ``plus``:
 
-.. code-block:: idris
+.. code-block::
 
     plusReduces n = Refl
 
@@ -92,7 +92,7 @@ It is slightly harder if we try the arguments the other way, because
 plus is defined by recursion on its first argument. The proof also works
 by recursion on the first argument to ``plus``, namely ``n``.
 
-.. code-block:: idris
+.. code-block::
 
     plusReducesZ : (n:Nat) -> n = plus n Z
     plusReducesZ Z = Refl
@@ -101,13 +101,13 @@ by recursion on the first argument to ``plus``, namely ``n``.
 ``cong`` is a function defined in the library which states that equality
 respects function application:
 
-.. code-block:: idris
+.. code-block::
 
     cong : {f : t -> u} -> a = b -> f a = f b
 
 We can do the same for the reduction behaviour of plus on successors:
 
-.. code-block:: idris
+.. code-block::
 
     plusReducesS : (n:Nat) -> (m:Nat) -> S (plus n m) = plus n (S m)
     plusReducesS Z m = Refl
@@ -133,7 +133,7 @@ all possible inputs and is guaranteed to terminate. Otherwise we could
 construct an element of the empty type, from which we could prove
 anything:
 
-.. code-block:: idris
+.. code-block::
 
     -- making use of 'hd' being partially defined
     empty1 : Void
@@ -163,7 +163,7 @@ check is, therefore, conservative. It is also possible (and indeed
 advisable, in the case of proofs) to mark functions as total so that it
 will be a compile time error for the totality check to fail:
 
-.. code-block:: idris
+.. code-block::
 
     total empty2 : Void
     empty2 = empty2
@@ -176,7 +176,7 @@ will be a compile time error for the totality check to fail:
 Reassuringly, our proof in Section :ref:`sect-empty` that the zero and
 successor constructors are disjoint is total:
 
-.. code-block:: idris
+.. code-block::
 
     *theorems> :total disjoint
     Total
@@ -236,7 +236,7 @@ sometimes this is hard to spot. For example, the following definition cannot be
 checked as ``total`` because the checker cannot decide that ``filter (<= x) xs``
 will always be smaller than ``(x :: xs)``:
 
-.. code-block:: idris
+.. code-block::
 
     qsort : Ord a => List a -> List a
     qsort [] = []
@@ -247,7 +247,7 @@ will always be smaller than ``(x :: xs)``:
 The function ``assert_smaller``, defined in the Prelude, is intended to
 address this problem:
 
-.. code-block:: idris
+.. code-block::
 
     assert_smaller : a -> a -> a
     assert_smaller x y = y
@@ -257,7 +257,7 @@ totality checker that ``y`` is structurally smaller than ``x``. This can
 be used to explain the reasoning for totality if the checker cannot work
 it out itself. The above example can now be written as:
 
-.. code-block:: idris
+.. code-block::
 
     total
     qsort : Ord a => List a -> List a
@@ -273,7 +273,7 @@ that the result of the filter will always be smaller than the pattern
 In more extreme cases, the function ``assert_total`` marks a
 subexpression as always being total:
 
-.. code-block:: idris
+.. code-block::
 
     assert_total : a -> a
     assert_total x = x

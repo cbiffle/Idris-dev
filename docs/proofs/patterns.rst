@@ -32,7 +32,7 @@ Creating a Definition
 To begin, create a file ``pluscomm.idr`` containing the following type
 declaration:
 
-.. code-block:: idris
+.. code-block::
 
     plus_commutes : (n : Nat) -> (m : Nat) -> n + m = m + n
 
@@ -40,7 +40,7 @@ To create a template definition for the proof, press ``\d`` (or the
 equivalent in your editor of choice) on the line with the type
 declaration. You should see:
 
-.. code-block:: idris
+.. code-block::
 
     plus_commutes : (n : Nat) -> (m : Nat) -> n + m = m + n
     plus_commutes n m = ?plus_commutes_rhs
@@ -50,7 +50,7 @@ To prove this by induction on ``n``, as we sketched in Section
 ``\c`` with the cursor over the ``n`` in the definition.) You
 should see:
 
-.. code-block:: idris
+.. code-block::
 
     plus_commutes : (n : Nat) -> (m : Nat) -> n + m = m + n
     plus_commutes Z m = ?plus_commutes_rhs_1
@@ -62,7 +62,7 @@ type of each reflects that ``n`` has been refined to ``Z`` and ``S k``
 in each respective case. Pressing ``\t`` over
 ``plus_commutes_rhs_1`` shows:
 
-.. code-block:: idris
+.. code-block::
 
       m : Nat
     --------------------------------------
@@ -72,7 +72,7 @@ Note that ``Z`` renders as ``0`` because the pretty printer renders
 natural numbers as integer literals for readability. Similarly, for
 ``plus_commutes_rhs_2``:
 
-.. code-block:: idris
+.. code-block::
 
       k : Nat
       m : Nat
@@ -81,7 +81,7 @@ natural numbers as integer literals for readability. Similarly, for
 
 It is a good idea to give these slightly more meaningful names:
 
-.. code-block:: idris
+.. code-block::
 
     plus_commutes : (n : Nat) -> (m : Nat) -> n + m = m + n
     plus_commutes Z m = ?plus_commutes_Z
@@ -94,7 +94,7 @@ We can create a separate lemma for the base case interactively, by
 pressing ``\l`` with the cursor over ``plus_commutes_Z``. This
 yields:
 
-.. code-block:: idris
+.. code-block::
 
     plus_commutes_Z : m = plus m 0
 
@@ -114,7 +114,7 @@ this by induction, this time on ``m``.
 
 First, create a template definition with ``\d``:
 
-.. code-block:: idris
+.. code-block::
 
     plus_commutes_Z : m = plus m 0
     plus_commutes_Z = ?plus_commutes_Z_rhs
@@ -122,14 +122,14 @@ First, create a template definition with ``\d``:
 Since we are going to write this by induction on ``m``, which is
 implicit, we will need to bring ``m`` into scope manually:
 
-.. code-block:: idris
+.. code-block::
 
     plus_commutes_Z : m = plus m 0
     plus_commutes_Z {m} = ?plus_commutes_Z_rhs
 
 Now, case split on ``m`` with ``\c``:
 
-.. code-block:: idris
+.. code-block::
 
     plus_commutes_Z : m = plus m 0
     plus_commutes_Z {m = Z} = ?plus_commutes_Z_rhs_1
@@ -138,7 +138,7 @@ Now, case split on ``m`` with ``\c``:
 Checking the type of ``plus_commutes_Z_rhs_1`` shows the following,
 which is easily proved by reflection:
 
-.. code-block:: idris
+.. code-block::
 
     --------------------------------------
     plus_commutes_Z_rhs_1 : 0 = 0
@@ -147,7 +147,7 @@ For such trivial proofs, we can let write the proof automatically by
 pressing ``\o`` with the cursor over ``plus_commutes_Z_rhs_1``.
 This yields:
 
-.. code-block:: idris
+.. code-block::
 
     plus_commutes_Z : m = plus m 0
     plus_commutes_Z {m = Z} = Refl
@@ -155,7 +155,7 @@ This yields:
 
 For ``plus_commutes_Z_rhs_2``, we are not so lucky:
 
-.. code-block:: idris
+.. code-block::
 
       k : Nat
     --------------------------------------
@@ -165,7 +165,7 @@ Inductively, we should know that ``k = plus k 0``, and we can get access
 to this inductive hypothesis by making a recursive call on k, as
 follows:
 
-.. code-block:: idris
+.. code-block::
 
     plus_commutes_Z : m = plus m 0
     plus_commutes_Z {m = Z} = Refl
@@ -174,7 +174,7 @@ follows:
 
 For ``plus_commutes_Z_rhs_2``, we now see:
 
-.. code-block:: idris
+.. code-block::
 
       k : Nat
       rec : k = plus k (fromInteger 0)
@@ -188,7 +188,7 @@ we use this to update the goal to ``S k = S k``?
 To achieve this, Idris provides a ``replace`` function as part of the
 prelude:
 
-.. code-block:: idris
+.. code-block::
 
     *pluscomm> :t replace
     replace : (x = y) -> P x -> P y
@@ -200,7 +200,7 @@ a little tricky to use because in general the implicit argument ``P``
 can be hard to infer by unification, so Idris provides a high level
 syntax which calculates the property and applies ``replace``:
 
-.. code-block:: idris
+.. code-block::
 
     rewrite prf in expr
 
@@ -209,14 +209,14 @@ property of ``x``, the ``rewrite ... in`` syntax will search for ``x``
 in the required type of ``expr`` and replace it with ``y``. Concretely,
 in our example, we can say:
 
-.. code-block:: idris
+.. code-block::
 
     plus_commutes_Z {m = (S k)} = let rec = plus_commutes_Z {m=k} in
                                       rewrite rec in ?plus_commutes_Z_rhs_2
 
 Checking the type of ``plus_commutes_Z_rhs_2`` now gives:
 
-.. code-block:: idris
+.. code-block::
 
       k : Nat
       rec : k = plus k (fromInteger 0)
@@ -231,19 +231,19 @@ replaced by ``plus k 0``.
 Alternatively, we could have applied the rewrite in the other direction
 using the ``sym`` function:
 
-.. code-block:: idris
+.. code-block::
 
     *pluscomm> :t sym
     sym : (l = r) -> r = l
 
-.. code-block:: idris
+.. code-block::
 
     plus_commutes_Z {m = (S k)} = let rec = plus_commutes_Z {m=k} in
                                       rewrite sym rec in ?plus_commutes_Z_rhs_2
 
 In this case, inspecting the type of the hole gives:
 
-.. code-block:: idris
+.. code-block::
 
       k : Nat
       rec : k = plus k (fromInteger 0)
@@ -254,7 +254,7 @@ In this case, inspecting the type of the hole gives:
 Either way, we can use proof search (``\o``) to complete the
 proof, giving:
 
-.. code-block:: idris
+.. code-block::
 
     plus_commutes_Z : m = plus m 0
     plus_commutes_Z {m = Z} = Refl
@@ -269,7 +269,7 @@ Inductive Step
 Our main theorem, ``plus_commutes`` should currently be in the following
 state:
 
-.. code-block:: idris
+.. code-block::
 
     plus_commutes : (n : Nat) -> (m : Nat) -> n + m = m + n
     plus_commutes Z m = plus_commutes_Z
@@ -277,7 +277,7 @@ state:
 
 Looking again at the type of ``plus_commutes_S``, we have:
 
-.. code-block:: idris
+.. code-block::
 
       k : Nat
       m : Nat
@@ -289,7 +289,7 @@ Conveniently, by induction we can immediately tell that
 recursive call to ``plus_commutes``. We add this directly, by hand, as
 follows:
 
-.. code-block:: idris
+.. code-block::
 
     plus_commutes : (n : Nat) -> (m : Nat) -> n + m = m + n
     plus_commutes Z m = plus_commutes_Z
@@ -297,7 +297,7 @@ follows:
 
 Checking the type of ``plus_commutes_S`` now gives:
 
-.. code-block:: idris
+.. code-block::
 
       k : Nat
       m : Nat
@@ -311,7 +311,7 @@ moved to the front in the right hand side of this equality. This
 remaining lemma takes a similar form to the ``plus_commutes_Z``; we
 begin by making a new top level lemma with ``\l``. This gives:
 
-.. code-block:: idris
+.. code-block::
 
     plus_commutes_S : (k : Nat) -> (m : Nat) -> S (plus m k) = plus m (S k)
 
@@ -319,7 +319,7 @@ Unlike the previous case, ``k`` and ``m`` are not made implicit because
 we cannot in general infer arguments to a function from its result.
 Again, we make a template definition with ``\d``:
 
-.. code-block:: idris
+.. code-block::
 
     plus_commutes_S : (k : Nat) -> (m : Nat) -> S (plus m k) = plus m (S k)
     plus_commutes_S k m = ?plus_commutes_S_rhs
@@ -327,7 +327,7 @@ Again, we make a template definition with ``\d``:
 Again, this is defined by induction over ``m``, since ``plus`` is
 defined by matching on its first argument. The complete definition is:
 
-.. code-block:: idris
+.. code-block::
 
     total
     plus_commutes_S : (k : Nat) -> (m : Nat) -> S (plus m k) = plus m (S k)

@@ -52,7 +52,7 @@ display all possible formatting (for example, images are not displayed
 when viewing documentation in the REPL, and only some terminals render
 italics correctly). A comprehensive set of examples is given below.
 
-.. code-block:: idris
+.. code-block::
 
 
     ||| Modules can also be documented.

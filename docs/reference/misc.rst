@@ -49,7 +49,7 @@ example, when translating integer literals.
 This can also be used to give simple automated proofs, for example: trying
 some constructors of proofs.
 
-.. code-block:: idris
+.. code-block::
 
     syntax Trivial = (| oh, refl |)
 
@@ -80,7 +80,7 @@ checker a hint:
 
 For example, the following function is not checked as total:
 
-.. code-block:: idris
+.. code-block::
 
     qsort : Ord a => List a -> List a
     qsort [] = []
@@ -91,7 +91,7 @@ produce a value smaller than the pattern ``x :: xs`` for the recursive
 call to ``qsort``. We can assert that this will always be true as
 follows:
 
-.. code-block:: idris
+.. code-block::
 
     total
     qsort : Ord a => List a -> List a
@@ -110,7 +110,7 @@ reflexive-transitive relations, using overloadable functions called
 functions allowing the syntax to be used for demonstrating equality.
 Here is an example:
 
-.. code-block:: idris
+.. code-block::
 
     import Syntax.PreorderReasoning
     multThree : (a, b, c : Nat) -> a * b * c = c * a * b
@@ -142,7 +142,7 @@ Pattern matching on Implicit Arguments
 Pattern matching is only allowed on implicit arguments when they are
 referred by name, e.g.
 
-.. code-block:: idris
+.. code-block::
 
     foo : {n : Nat} -> Nat
     foo {n = Z} = Z
@@ -150,14 +150,14 @@ referred by name, e.g.
 
 or
 
-.. code-block:: idris
+.. code-block::
 
     foo : {n : Nat} -> Nat
     foo {n = n} = n
 
 The latter could be shortened to the following:
 
-.. code-block:: idris
+.. code-block::
 
     foo : {n : Nat} -> Nat
     foo {n} = n
@@ -171,7 +171,7 @@ Existence of an instance
 In order to show that an instance of some typeclass is defined for some
 type, one could use the ``%instance`` keyword:
 
-.. code-block:: idris
+.. code-block::
 
     foo : Num Nat
     foo = %instance
@@ -183,7 +183,7 @@ type, one could use the ``%instance`` keyword:
 the type ``ty``, by matching ``ty`` against the function's type. This
 can be used in proofs, for example:
 
-.. code-block:: idris
+.. code-block::
 
     plus_comm : (n : Nat) -> (m : Nat) -> (n + m = m + n)
     -- Base case

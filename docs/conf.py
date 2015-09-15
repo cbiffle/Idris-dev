@@ -366,3 +366,6 @@ epub_exclude_files = ['search.html']
 
 # If false, no index is generated.
 #epub_use_index = True
+
+# If no other language is specified, highlight code as Idris code.
+highlight_language = 'idris'

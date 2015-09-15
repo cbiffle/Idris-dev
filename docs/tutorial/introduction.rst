@@ -32,7 +32,7 @@ resulting list's length is the sum of the lengths of the two input
 lists. We can therefore give the following type to the ``app``
 function, which concatenates vectors:
 
-.. code-block:: idris
+.. code-block::
 
     app : Vect n a -> Vect m a -> Vect (n + m) a
 

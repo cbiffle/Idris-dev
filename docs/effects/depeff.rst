@@ -22,7 +22,7 @@ Suppose we have a function which reads input from the console, converts
 it to an integer, and adds it to a list which is stored in a ``STATE``.
 It might look something like the following:
 
-.. code-block:: idris
+.. code-block::
 
     readInt : Eff () [STATE (List Int), STDIO] 
     readInt = do let x = trim !getStr
@@ -31,7 +31,7 @@ It might look something like the following:
 But what if, instead of a list of integers, we would like to store a
 ``Vect``, maintaining the length in the type?
 
-.. code-block:: idris
+.. code-block::
 
     readInt : Eff () [STATE (Vect n Int), STDIO]
     readInt = do let x = trim !getStr
@@ -41,7 +41,7 @@ This will not type check! Although the vector has length ``n`` on entry
 to ``readInt``, it has length ``S n`` on exit. The library allows us to
 express this as follows:
 
-.. code-block:: idris
+.. code-block::
 
     readInt : Eff ()[STATE (Vect n Int), STDIO] 
                     [STATE (Vect (S n) Int), STDIO]
@@ -54,7 +54,7 @@ available. We have used ``putM`` to update the state, where the ``M``
 suffix indicates that the *type* is being updated as well as the value.
 It has the following type:
 
-.. code-block:: idris
+.. code-block::
 
     putM : y -> Eff () [STATE x] [STATE y]
 
@@ -67,7 +67,7 @@ update the vector only if the input is a valid integer (i.e. all
 digits). As a first attempt, we could try the following, returning a
 ``Bool`` which indicates success:
 
-.. code-block:: idris
+.. code-block::
 
     readInt : Eff Bool [STATE (Vect n Int), STDIO]
                        [STATE (Vect (S n) Int), STDIO]
@@ -89,7 +89,7 @@ extended in both branches of the ``case``!
 Clearly, the size of the resulting vector depends on whether or not the
 value read from the user was valid. We can express this in the type:
 
-.. code-block:: idris
+.. code-block::
 
     readInt : Eff Bool [STATE (Vect n Int), STDIO]
                 (\ok => if ok then [STATE (Vect (S n) Int), STDIO]
@@ -103,7 +103,7 @@ value read from the user was valid. We can express this in the type:
 Using ``pureM`` rather than ``pure`` allows the output effects to be
 calculated from the value given. Its type is:
 
-.. code-block:: idris
+.. code-block::
 
     pureM : (val : a) -> EffM m a (xs val) xs
 
@@ -111,7 +111,7 @@ When using ``readInt``, we will have to check its return
 value in order to know what the new set of effects is. For example, to
 read a set number of values into a vector, we could write the following:
 
-.. code-block:: idris
+.. code-block::
 
     readN : (n : Nat) ->
             Eff () [STATE (Vect m Int), STDIO]
@@ -160,7 +160,7 @@ effect’s definition is given below. Note that this
 effect is mainly for illustrative purposes—typically we would also like
 to support random access files and better reporting of error conditions.
 
-.. code-block:: idris
+.. code-block::
 
     module Effect.File
 
@@ -187,7 +187,7 @@ to support random access files and better reporting of error conditions.
 
 In particular, consider the type of ``open``:
 
-.. code-block:: idris
+.. code-block::
 
     open : (fname : String)
            -> (m : Mode)
@@ -203,7 +203,7 @@ and if not, we have no file handle. By ``case`` analysis on the result,
 we continue the protocol accordingly.
 
 .. _eff-readfile:
-.. code-block:: idris
+.. code-block::
 
     readFile : Eff (List String) [FILE_IO (OpenFile Read)]
     readFile = readAcc [] where
@@ -217,7 +217,7 @@ an open file until reaching the end, we can write a program which opens
 a file, reads it, then displays the contents and closes it, as follows,
 correctly following the protocol:
 
-.. code-block:: idris
+.. code-block::
 
     dumpFile : String -> Eff () [FILE_IO (), STDIO]
     dumpFile name = case !(open name Read) of
@@ -258,7 +258,7 @@ has a corresponding close.
 
 Idris supports *pattern-matching* bindings, such as the following:
 
-.. code-block:: idris
+.. code-block::
 
     dumpFile : String -> Eff () [FILE_IO (), STDIO]
     dumpFile name = do True <- open name Read
@@ -270,7 +270,7 @@ opening a file failed! The solution is to extend the pattern-matching
 binding syntax to give brief clauses for failing matches. Here, for
 example, we could write:
 
-.. code-block:: idris
+.. code-block::
 
     dumpFile : String -> Eff () [FILE_IO (), STDIO]
     dumpFile name  = do True <- open name Read | False => putStrLn "Error"
@@ -280,14 +280,14 @@ example, we could write:
 This is exactly equivalent to the definition with the explicit ``case``.
 In general, in a ``do``-block, the syntax:
 
-.. code-block:: idris
+.. code-block::
 
     do pat <- val | <alternatives>
        p
 
 is desugared to
 
-.. code-block:: idris
+.. code-block::
 
     do x <- val
        case x of
@@ -300,7 +300,7 @@ reading command line arguments, among other things (see Appendix
 :ref:`sect-appendix`). To read command line arguments, we can use
 ``getArgs``:
 
-.. code-block:: idris
+.. code-block::
 
     getArgs : Eff (List String) [SYSTEM]
 
@@ -308,7 +308,7 @@ A main program can read command line arguments as follows, where in the
 list which is returned, the first element ``prog`` is the executable
 name and the second is an expected argument:
 
-.. code-block:: idris
+.. code-block::
 
     emain : Eff () [SYSTEM, STDIO]
     emain = do [prog, arg] <- getArgs
@@ -319,7 +319,7 @@ Unfortunately, this will not fail gracefully if no argument is given, or
 if too many arguments are given. We can use pattern matching bind
 alternatives to give a better (more informative) error:
 
-.. code-block:: idris
+.. code-block::
 
     emain : Eff () [SYSTEM, STDIO]
     emain = do [prog, arg] <- getArgs | [] => putStrLn "Can't happen!"

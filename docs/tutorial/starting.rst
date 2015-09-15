@@ -40,7 +40,7 @@ To check that installation has succeeded, and to write your first
 Idris program, create a file called ``hello.idr`` containing the
 following text:
 
-.. code-block:: idris
+.. code-block::
 
     module Main
 

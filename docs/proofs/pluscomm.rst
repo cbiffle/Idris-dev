@@ -6,7 +6,7 @@ Throughout this tutorial, we will be working with the following
 function, defined in the Idris prelude, which defines addition on
 natural numbers:
 
-.. code-block:: idris
+.. code-block::
 
     plus : Nat -> Nat -> Nat
     plus Z     m = m
@@ -18,7 +18,7 @@ adding ``m`` to any non-zero number ``S k`` always results in
 ``S (plus k m)``. We can see this by evaluation at the Idris REPL (i.e.
 the prompt, the read-eval-print loop):
 
-.. code-block:: idris
+.. code-block::
 
     Idris> \m => plus Z m
     \m => m : Nat -> Nat
@@ -50,7 +50,7 @@ Equality Proofs
 Idris has a built-in propositional equality type, conceptually defined
 as follows:
 
-.. code-block:: idris
+.. code-block::
 
     data (=) : a -> b -> Type where
          Refl : x = x
@@ -69,14 +69,14 @@ We have a *type* for propositional equality here, and correspondingly a
 the corresponding proposition [1]_. So, trivially, we can prove that
 ``4`` equals ``4``:
 
-.. code-block:: idris
+.. code-block::
 
     four_eq : 4 = 4
     four_eq = Refl
 
 However, trying to prove that ``4 = 5`` results in failure:
 
-.. code-block:: idris
+.. code-block::
 
     four_eq_five : 4 = 5
     four_eq_five = Refl
@@ -112,7 +112,7 @@ that ``x`` be both ``4`` and ``5``, and therefore fail.
 Since type checking involves reduction to normal form, we can write the
 following equalities directly:
 
-.. code-block:: idris
+.. code-block::
 
     twoplustwo_eq_four : 2 + 2 = 4
     twoplustwo_eq_four = Refl
@@ -129,7 +129,7 @@ Heterogeneous Equality
 Equality in Idris is *heterogeneous*, meaning that we can even propose
 equalities between values in different types:
 
-.. code-block:: idris
+.. code-block::
 
     idris_not_php : 2 = "2"
 
@@ -139,7 +139,7 @@ in different types. However, with dependent types, such equalities can
 arise naturally. For example, if two vectors are equal, their lengths
 must be equal:
 
-.. code-block:: idris
+.. code-block::
 
     vect_eq_length : (xs : Vect n a) -> (ys : Vect m a) ->
                      (xs = ys) -> n = m
@@ -149,7 +149,7 @@ their lengths are different, but we would still like to draw a
 conclusion about the lengths if they happen to be equal. We can define
 ``vect_eq_length`` as follows:
 
-.. code-block:: idris
+.. code-block::
 
     vect_eq_length xs xs Refl = Refl
 
@@ -160,7 +160,7 @@ therefore their types must be equal, so the lengths must be equal.
 Alternatively, we can put an underscore for the second ``xs``, since
 there is only one value which will type check:
 
-.. code-block:: idris
+.. code-block::
 
     vect_eq_length xs _ Refl = Refl
 
@@ -170,7 +170,7 @@ Properties of ``plus``
 Using the ``(=)`` type, we can now state the properties of ``plus``
 given above as Idris type declarations:
 
-.. code-block:: idris
+.. code-block::
 
     plus_commutes : (n, m : Nat) -> plus n m = plus m n
     plus_assoc : (n, m, p : Nat) -> plus n (plus m p) = plus (plus n m) p

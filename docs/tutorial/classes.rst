@@ -17,7 +17,7 @@ collection of overloaded operations which describe the interface for
 class, which is defined in the prelude and provides an interface for
 converting values to ``String``:
 
-.. code-block:: idris
+.. code-block::
 
     class Show a where
         show : a -> String
@@ -25,7 +25,7 @@ converting values to ``String``:
 This generates a function of the following type (which we call a
 *method* of the ``Show`` class):
 
-.. code-block:: idris
+.. code-block::
 
     show : Show a => a -> String
 
@@ -35,7 +35,7 @@ of a class is defined with an ``instance`` declaration, which provides
 implementations of the function for a specific type. For example, the
 ``Show`` instance for ``Nat`` could be defined as:
 
-.. code-block:: idris
+.. code-block::
 
     instance Show Nat where
         show Z = "Z"
@@ -55,7 +55,7 @@ example, to define a ``Show`` instance for vectors, we need to know
 that there is a ``Show`` instance for the element type, because we are
 going to use it to convert each element to a ``String``:
 
-.. code-block:: idris
+.. code-block::
 
     instance Show a => Show (Vect n a) where
         show xs = "[" ++ show' xs ++ "]" where
@@ -71,7 +71,7 @@ The library defines an ``Eq`` class which provides an interface for
 comparing values for equality or inequality, with instances for all of
 the built-in types:
 
-.. code-block:: idris
+.. code-block::
 
     class Eq a where
         (==) : a -> a -> Bool
@@ -80,7 +80,7 @@ the built-in types:
 To declare an instance of a type, we have to give definitions of all
 of the methods. For example, for an instance of ``Eq`` for ``Nat``:
 
-.. code-block:: idris
+.. code-block::
 
     instance Eq Nat where
         Z     == Z     = True
@@ -95,7 +95,7 @@ anything other than the negation of the result of applying the ``==``
 method. It is therefore convenient to give a default definition for
 each method in the class declaration, in terms of the other method:
 
-.. code-block:: idris
+.. code-block::
 
     class Eq a where
         (==) : a -> a -> Bool
@@ -117,11 +117,11 @@ relation ``Eq`` is to define an ordering relation ``Ord``. We can
 define an ``Ord`` class which inherits methods from ``Eq`` as well as
 defining some of its own:
 
-.. code-block:: idris
+.. code-block::
 
     data Ordering = LT | EQ | GT
 
-.. code-block:: idris
+.. code-block::
 
     class Eq a => Ord a where
         compare : a -> a -> Ordering
@@ -141,7 +141,7 @@ provided that the element type of the list is in the ``Ord`` class. We
 give the constraints on the type variables left of the fat arrow
 ``=>``, and the function type to the right of the fat arrow:
 
-.. code-block:: idris
+.. code-block::
 
     sort : Ord a => List a -> List a
 
@@ -149,7 +149,7 @@ Functions, classes and instances can have multiple
 constraints. Multiple constraints are written in brackets in a comma
 separated list, for example:
 
-.. code-block:: idris
+.. code-block::
 
     sortAndShow : (Ord a, Show a) => List a -> String
     sortAndShow xs = show (sort xs)
@@ -164,7 +164,7 @@ of the parameter is not ``Type``, we need to give an explicit type
 declaration. For example, the ``Functor`` class is defined in the
 library:
 
-.. code-block:: idris
+.. code-block::
 
     class Functor (f : Type -> Type) where
         map : (m : a -> b) -> f a -> f b
@@ -172,7 +172,7 @@ library:
 A functor allows a function to be applied across a structure, for
 example to apply a function to every element in a ``List``:
 
-.. code-block:: idris
+.. code-block::
 
     instance Functor List where
       map f []      = []
@@ -186,7 +186,7 @@ example to apply a function to every element in a ``List``:
 Having defined ``Functor``, we can define ``Applicative`` which
 abstracts the notion of function application:
 
-.. code-block:: idris
+.. code-block::
 
     infixl 2 <*>
 
@@ -202,7 +202,7 @@ and is the basis of ``do``-notation introduced in Section
 :ref:`sect-do`. It extends ``Applicative`` as defined above, and is
 defined as follows:
 
-.. code-block:: idris
+.. code-block::
 
     class Applicative m => Monad (m : Type -> Type) where
         (>>=)  : m a -> (a -> m b) -> m b
@@ -219,7 +219,7 @@ applied:
 ``IO`` is an instance of ``Monad``, defined using primitive functions.
 We can also define an instance for ``Maybe``, as follows:
 
-.. code-block:: idris
+.. code-block::
 
     instance Monad Maybe where
         Nothing  >>= k = Nothing
@@ -228,7 +228,7 @@ We can also define an instance for ``Maybe``, as follows:
 Using this we can, for example, define a function which adds two
 ``Maybe Int``, using the monad to encapsulate the error handling:
 
-.. code-block:: idris
+.. code-block::
 
     m_add : Maybe Int -> Maybe Int -> Maybe Int
     m_add x y = do x' <- x -- Extract value from x
@@ -255,7 +255,7 @@ verbose, particularly in cases such as ``m_add`` above where the value
 bound is used once, immediately. In these cases, we can use a
 shorthand version, as follows:
 
-.. code-block:: idris
+.. code-block::
 
     m_add : Maybe Int -> Maybe Int -> Maybe Int
     m_add x y = return (!x + !y)
@@ -264,7 +264,7 @@ The notation ``!expr`` means that the expression ``expr`` should be
 evaluated and then implicitly bound. Conceptually, we can think of
 ``!`` as being a prefix function with the following type:
 
-.. code-block:: idris
+.. code-block::
 
     (!) : m a -> a
 
@@ -278,13 +278,13 @@ expressions are monadic.
 
 For example, the expression:
 
-.. code-block:: idris
+.. code-block::
 
     let y = 42 in f !(g !(print y) !x)
 
 is lifted to:
 
-.. code-block:: idris
+.. code-block::
 
     let y = 42 in do y' <- print y
                      x' <- x
@@ -298,7 +298,7 @@ The list comprehension notation we saw in Section
 :ref:`sect-more-expr` is more general, and applies to anything which
 is an instance of both ``Monad`` and ``Alternative``:
 
-.. code-block:: idris
+.. code-block::
 
     class Applicative f => Alternative (f : Type -> Type) where
         empty : f a
@@ -317,20 +317,20 @@ To translate a comprehension ``[exp | qual1, qual2, …, qualn]``, first
 any qualifier ``qual`` which is a *guard* is translated to ``guard
 qual``, using the following function:
 
-.. code-block:: idris
+.. code-block::
 
     guard : Alternative f => Bool -> f ()
 
 Then the comprehension is converted to ``do`` notation:
 
-.. code-block:: idris
+.. code-block::
 
     do { qual1; qual2; ...; qualn; return exp; }
 
 Using monad comprehensions, an alternative definition for ``m_add``
 would be:
 
-.. code-block:: idris
+.. code-block::
 
     m_add : Maybe Int -> Maybe Int -> Maybe Int
     m_add x y = [ x' + y' | x' <- x, y' <- y ]
@@ -347,7 +347,7 @@ First, let us revisit ``m_add`` above. All it is really doing is
 applying an operator to two values extracted from ``Maybe Int``. We
 could abstract out the application:
 
-.. code-block:: idris
+.. code-block::
 
     m_app : Maybe (a -> b) -> Maybe a -> Maybe b
     m_app (Just f) (Just a) = Just (f a)
@@ -357,7 +357,7 @@ Using this, we can write an alternative ``m_add`` which uses this
 alternative notion of function application, with explicit calls to
 ``m_app``:
 
-.. code-block:: idris
+.. code-block::
 
     m_add' : Maybe Int -> Maybe Int -> Maybe Int
     m_add' x y = m_app (m_app (Just (+)) x) y
@@ -368,7 +368,7 @@ To do this, we can make ``Maybe`` an instance of ``Applicative``
 as follows, where ``<*>`` is defined in the same way as ``m_app``
 above (this is defined in the Idris library):
 
-.. code-block:: idris
+.. code-block::
 
     instance Applicative Maybe where
         pure = Just
@@ -380,7 +380,7 @@ Using ``<*>`` we can use this instance as follows, where a function
 application ``[| f a1 …an |]`` is translated into ``pure f <*> a1 <*>
 … <*> an``:
 
-.. code-block:: idris
+.. code-block::
 
     m_add' : Maybe Int -> Maybe Int -> Maybe Int
     m_add' x y = [| x + y |]
@@ -392,7 +392,7 @@ Idiom notation is commonly useful when defining evaluators. McBride
 and Paterson describe such an evaluator [1]_, for a language similar
 to the following:
 
-.. code-block:: idris
+.. code-block::
 
     data Expr = Var String      -- variables
               | Val Int         -- values
@@ -402,7 +402,7 @@ Evaluation will take place relative to a context mapping variables
 (represented as ``String``\s) to ``Int`` values, and can possibly fail.
 We define a data type ``Eval`` to wrap an evaluator:
 
-.. code-block:: idris
+.. code-block::
 
     data Eval : Type -> Type where
          MkEval : (List (String, Int) -> Maybe a) -> Eval a
@@ -411,7 +411,7 @@ Wrapping the evaluator in a data type means we will be able to make it
 an instance of a type class later. We begin by defining a function to
 retrieve values from the context during evaluation:
 
-.. code-block:: idris
+.. code-block::
 
     fetch : String -> Eval Int
     fetch x = MkEval (\e => fetchVal e) where
@@ -427,7 +427,7 @@ functions in the context of an ``Eval``, so it is natural to make
 instance of ``Applicative`` it is necessary to make ``Eval`` an
 instance of ``Functor``:
 
-.. code-block:: idris
+.. code-block::
 
     instance Functor Eval where
         map f (MkEval g) = MkEval (\e => map f (g e))
@@ -443,7 +443,7 @@ instance of ``Functor``:
 Evaluating an expression can now make use of the idiomatic application
 to handle errors:
 
-.. code-block:: idris
+.. code-block::
 
     eval : Expr -> Eval Int
     eval (Var x)   = fetch x
@@ -461,7 +461,7 @@ It can be desirable to have multiple instances of a type class, for
 example to provide alternative methods for sorting or printing values.
 To achieve this, instances can be *named* as follows:
 
-.. code-block:: idris
+.. code-block::
 
     instance [myord] Ord Nat where
        compare Z (S n)     = GT
@@ -475,7 +475,7 @@ This declares an instance as normal, but with an explicit name,
 can use this, for example, to sort a list of ``Nat`` in reverse.
 Given the following list:
 
-.. code-block:: idris
+.. code-block::
 
     testList : List Nat
     testList = [3,4,1]
@@ -498,7 +498,7 @@ When a class has more than one parameter, it can help resolution if
 the parameters used to resolve the type class are restricted. For
 example:
 
-.. code-block:: idris
+.. code-block::
 
     class Monad m => MonadState s (m : Type -> Type) | m where
       get : m s

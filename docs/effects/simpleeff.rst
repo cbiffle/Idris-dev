@@ -8,7 +8,7 @@ So far we have seen how to write programs with locally mutable state
 using the ``STATE`` effect. To recap, we have the definitions below
 in a module ``Effect.State``
 
-.. code-block:: idris
+.. code-block::
 
     module Effect.State
 
@@ -50,7 +50,7 @@ constraint here on the computation context ``m``, because it only
 makes sense to support console I/O operations in a context where we
 can perform (or at the very least simulate) console I/O:
 
-.. code-block:: idris
+.. code-block::
 
     module Effect.StdIO
 
@@ -72,7 +72,7 @@ Examples
 A program which reads the user’s name, then says hello, can be written
 as follows:
 
-.. code-block:: idris
+.. code-block::
 
     hello : Eff () [STDIO]
     hello = do putStr "Name? "
@@ -84,7 +84,7 @@ input. The resource associated with ``STDIO`` is simply the empty
 tuple, which has a default value ``()``, so we can run this as
 follows:
 
-.. code-block:: idris
+.. code-block::
 
     main : IO ()
     main = run hello
@@ -92,7 +92,7 @@ follows:
 In ``hello`` we could also use ``!``-notation instead of ``x <-
 getStr``, since we only use the string that is read once:
 
-.. code-block:: idris
+.. code-block::
 
     hello : Eff () [STDIO]
     hello = do putStr "Name? "
@@ -102,7 +102,7 @@ More interestingly, we can combine multiple effects in one
 program. For example, we can loop, counting the number of people we’ve
 said hello to:
 
-.. code-block:: idris
+.. code-block::
 
     hello : Eff () [STATE Int, STDIO]
     hello = do putStr "Name? "
@@ -124,7 +124,7 @@ if we want to initialise a resource explicitly with ``runInit`` rather
 than using a default value with ``run``) we can run the
 ``resourceType`` function at the REPL:
 
-.. code-block:: idris
+.. code-block::
 
     *ConsoleIO> resourceType STDIO
     () : Type
@@ -140,7 +140,7 @@ to exit immediately with an error, or errors to be handled more
 generally:
 
 .. _eff-exception:
-.. code-block:: idris
+.. code-block::
 
     module Effect.Exception
 
@@ -163,7 +163,7 @@ which returns an ``Int`` if parsing the string returns a number in the
 appropriate range, or throws an exception otherwise. Exceptions are
 parameterised by an error type:
 
-.. code-block:: idris
+.. code-block::
 
     data Err = NotANumber | OutOfRange
 
@@ -181,14 +181,14 @@ context which has some way of throwing errors, for example, we can run
 ``parseNumber`` in the ``Either Err`` context. It returns a value of
 the form ``Right x`` if successful:
 
-.. code-block:: idris
+.. code-block::
 
     *Exception> the (Either Err Int) $ run (parseNumber 42 "20")
     Right 20 : Either Err Int
 
 Or ``Left e`` on failure, carrying the appropriate exception:
 
-.. code-block:: idris
+.. code-block::
 
     *Exception> the (Either Err Int) $ run (parseNumber 42 "50")
     Left OutOfRange : Either Err Int
@@ -201,7 +201,7 @@ it return a *proof* that the integer is in the required range along
 with the integer itself. One way to do this is define a type of
 bounded integers, ``Bounded``:
 
-.. code-block:: idris
+.. code-block::
 
     Bounded : Int -> Type
     Bounded x = (n : Int ** So (n >= 0 && n <= x))
@@ -210,7 +210,7 @@ Recall that ``So`` is parameterised by a ``Bool``, and only ``So
 True`` is inhabited. We can use ``choose`` to construct such a value
 from the result of a dynamic check:
 
-.. code-block:: idris
+.. code-block::
 
     data So : Bool -> Type = Oh : So True
 
@@ -220,7 +220,7 @@ We then write ``parseNumber`` using ``choose`` rather than an
 ``if/then/else`` construct, passing the proof it returns on success as
 the boundedness proof:
 
-.. code-block:: idris
+.. code-block::
 
     parseNumber : (x : Int) -> String -> Eff (Bounded x) [EXCEPTION Err]
     parseNumber x str
@@ -237,7 +237,7 @@ Random Numbers
 Random number generation is also implemented by the library, in module
 ``Effect.Random``:
 
-.. code-block:: idris
+.. code-block::
 
     module Effect.Random
 
@@ -270,14 +270,14 @@ We can use the ``RND`` effect to implement a simple guessing game. The
 user for a guess, and state whether the guess is too high, too low, or
 correct:
 
-.. code-block:: idris
+.. code-block::
 
     guess : Int -> Eff () [STDIO]
 
 For reference, the code for ``guess`` is given below:
 
 .. _eff-game:
-.. code-block:: idris
+.. code-block::
 
     guess : Int -> Eff () [STDIO]
     guess target
@@ -301,7 +301,7 @@ To invoke this, we pick a random number within the range 0–100,
 having set up the random number generator with a seed, then run
 ``guess``:
 
-.. code-block:: idris
+.. code-block::
 
     game : Eff () [RND, STDIO]
     game = do srand 123456789
@@ -324,7 +324,7 @@ effect, which allows a program to choose a value non-deterministically
 from a list of possibilities in such a way that the entire computation
 succeeds:
 
-.. code-block:: idris
+.. code-block::
 
     import Effects
     import Effect.Select
@@ -344,7 +344,7 @@ as finding Pythagorean triples. The idea is to use ``select`` to give
 a set of candidate values, then throw an exception for any combination
 of values which does not satisfy the constraint:
 
-.. code-block:: idris
+.. code-block::
 
     triple : Int -> Eff (Int, Int, Int) [SELECT, EXCEPTION String]
     triple max = do z <- select [1..max]
@@ -366,7 +366,7 @@ contexts which can capture failure. Depending on the context ``m``,
 ``Maybe`` context) or all triples in the range (if in ``List``
 context). We can try this as follows:
 
-.. code-block:: idris
+.. code-block::
 
     main : IO ()
     main = do print $ the (Maybe _) $ run (triple 100)
@@ -378,7 +378,7 @@ context). We can try this as follows:
 We now return to the ``vadd`` program from the introduction. Recall the
 definition:
 
-.. code-block:: idris
+.. code-block::
 
     vadd : Vect n Int -> Vect n Int -> Vect n Int
     vadd []        []        = []
@@ -393,7 +393,7 @@ length ``n`` and ``m`` by matching on the implicit arguments ``n`` and
 ``m`` and using ``decEq`` to produce a proof of their equality, if
 they are equal:
 
-.. code-block:: idris
+.. code-block::
 
     vadd_check : Vect n Int -> Vect m Int ->
                  Eff (Vect m Int) [EXCEPTION String]
@@ -404,7 +404,7 @@ they are equal:
 To read a vector from the console, we implement a function of the
 following type:
 
-.. code-block:: idris
+.. code-block::
 
     read_vec : Eff (p ** Vect p Int) [STDIO]
 
@@ -419,7 +419,7 @@ Finally, we write a program which reads two vectors and prints the
 result of pairwise addition of them, throwing an exception if the
 inputs are of differing lengths:
 
-.. code-block:: idris
+.. code-block::
 
     do_vadd : Eff () [STDIO, EXCEPTION String]
     do_vadd = do putStrLn "Vector 1"
@@ -434,7 +434,7 @@ equal.  This does not stop us reading vectors from user input, but it
 does require that the lengths are checked and any discrepancy is dealt
 with gracefully.
 
-.. code-block:: idris
+.. code-block::
 
     read_vec : Eff (p ** Vect p Int) [STDIO]
     read_vec = do putStr "Number (-1 when done): "
@@ -459,7 +459,7 @@ To show how these effects can fit together, let us consider an
 evaluator for a simple expression language, with addition and integer
 values.
 
-.. code-block:: idris
+.. code-block::
 
     data Expr = Val Integer
               | Add Expr Expr
@@ -467,7 +467,7 @@ values.
 An evaluator for this language always returns an ``Integer``, and
 there are no situations in which it can fail!
 
-.. code-block:: idris
+.. code-block::
 
     eval : Expr -> Integer
     eval (Val x) = x
@@ -477,7 +477,7 @@ If we add variables, however, things get more interesting. The
 evaluator will need to be able to access the values stored in
 variables, and variables may be undefined.
 
-.. code-block:: idris
+.. code-block::
 
     data Expr = Val Integer
               | Var String
@@ -488,7 +488,7 @@ and supports an exception effect for throwing errors, and a state
 containing a mapping from variable names (as ``String``) to their
 values:
 
-.. code-block:: idris
+.. code-block::
 
     Env : Type
     Env = List (String, Integer)
@@ -501,7 +501,7 @@ Note that we are using ``!``-notation to avoid having to bind
 subexpressions in a ``do`` block. Next, we add a case for evaluating
 ``Var``:
 
-.. code-block:: idris
+.. code-block::
 
     eval (Var x) = case lookup x !get of
                         Nothing => raise $ "No such variable " ++ x
@@ -516,7 +516,7 @@ To run the evaluator on a particular expression in a particular
 environment of names and their values, we can write a function which
 sets the state then invokes ``eval``:
 
-.. code-block:: idris
+.. code-block::
 
     runEval : List (String, Integer) -> Expr -> Maybe Integer
     runEval args expr = run (eval' expr)
@@ -534,7 +534,7 @@ What if we want to extend the evaluator further, with random number
 generation? To achieve this, we add a new constructor to ``Expr``,
 which gives a random number up to a maximum value:
 
-.. code-block:: idris
+.. code-block::
 
     data Expr = Val Integer
               | Var String
@@ -545,7 +545,7 @@ Then, we need to deal with the new case, making sure that we extend
 the list of events to include ``RND``. It doesn't matter where ``RND``
 appears in the list, as long as it is present:
 
-.. code-block:: idris
+.. code-block::
 
     eval : Expr -> Eff Integer [EXCEPTION String, RND, STATE Env]
 
@@ -554,7 +554,7 @@ appears in the list, as long as it is present:
 For test purposes, we might also want to print the random number which
 has been generated:
 
-.. code-block:: idris
+.. code-block::
 
     eval (Random upper) = do val <- rndInt 0 upper
                              putStrLn (show val)
@@ -573,7 +573,7 @@ error something like the following:
 In other words, the ``STDIO`` effect is not available. We can correct
 this simply by updating the type of ``eval`` to include ``STDIO``.
 
-.. code-block:: idris
+.. code-block::
 
     eval : Expr -> Eff Integer [STDIO, EXCEPTION String, RND, STATE Env]
 
@@ -584,7 +584,7 @@ to encapsulate sets of effects in a type synonym. This is achieved as
 follows, simply by defining a function which computes a type, since
 types are first class in Idris:
 
-.. code-block:: idris
+.. code-block::
 
     EvalEff : Type -> Type
     EvalEff t = Eff t [STDIO, EXCEPTION String, RND, STATE Env]

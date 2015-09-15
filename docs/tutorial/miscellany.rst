@@ -20,7 +20,7 @@ Auto implicit arguments
 We have already seen implicit arguments, which allows arguments to be
 omitted when they can be inferred by the type checker, e.g.
 
-.. code-block:: idris
+.. code-block::
 
     index : {a:Type} -> {n:Nat} -> Fin n -> Vect n a -> a
 
@@ -29,7 +29,7 @@ checking but by searching the context for an appropriate value, or
 constructing a proof. For example, the following definition of ``head``
 which requires a proof that the list is non-empty:
 
-.. code-block:: idris
+.. code-block::
 
     isCons : List a -> Bool
     isCons [] = False
@@ -43,7 +43,7 @@ value is known or because a proof already exists in the context, the
 proof can be constructed automatically. Auto implicit arguments allow
 this to happen silently. We define ``head`` as follows:
 
-.. code-block:: idris
+.. code-block::
 
     head : (xs : List a) -> {auto p : isCons xs = True} -> a
     head (x :: xs) = x
@@ -63,7 +63,7 @@ of the appropriate type. It will try the following, in order:
 
 In the case that a proof is not found, it can be provided explicitly as normal:
 
-.. code-block:: idris
+.. code-block::
 
     head xs {p = ?headProof}
 
@@ -71,7 +71,7 @@ More generally, we can fill in implicit arguments with a default value
 by annotating them with ``default``. The definition above is equivalent
 to:
 
-.. code-block:: idris
+.. code-block::
 
     head : (xs : List a) ->
            {default proof { trivial; } p : isCons xs = True} -> a
@@ -85,7 +85,7 @@ automatic conversion of values from one type to another when required to
 make a term type correct. This is intended to increase convenience and
 reduce verbosity. A contrived but simple example is the following:
 
-.. code-block:: idris
+.. code-block::
 
     implicit intString : Int -> String
     intString = show
@@ -114,7 +114,7 @@ an extension of ``.lidr`` then it is assumed to be a literate file. In
 literate programs, everything is assumed to be a comment unless the line
 begins with a greater than sign ``>``, for example:
 
-.. code-block:: idris
+.. code-block::
 
     > module literate
 
@@ -138,7 +138,7 @@ the prelude. For this, we assume a certain amount of knowledge of C and
 the ``gcc`` compiler. First, we define a datatype which describes the
 external types we can handle:
 
-.. code-block:: idris
+.. code-block::
 
     data FTy = FInt | FFloat | FChar | FString | FPtr | FUnit
 
@@ -147,7 +147,7 @@ Each of these corresponds directly to a C type. Respectively: ``int``,
 translation to a concrete Idris type, described by the following
 function:
 
-.. code-block:: idris
+.. code-block::
 
     interpFTy : FTy -> Type
     interpFTy FInt    = Int
@@ -160,14 +160,14 @@ function:
 A foreign function is described by a list of input types and a return
 type, which can then be converted to an Idris type:
 
-.. code-block:: idris
+.. code-block::
 
     ForeignTy : (xs:List FTy) -> (t:FTy) -> Type
 
 A foreign function is assumed to be impure, so ``ForeignTy`` builds an
 ``IO`` type, for example:
 
-.. code-block:: idris
+.. code-block::
 
     Idris> ForeignTy [FInt, FString] FString
     Int -> String -> IO String : Type
@@ -180,7 +180,7 @@ function, a list of argument types and the return type. The built in
 construct ``mkForeign`` converts this description to a function callable
 by Idris:
 
-.. code-block:: idris
+.. code-block::
 
     data Foreign : Type -> Type where
         FFun : String -> (xs:List FTy) -> (t:FTy) ->
@@ -193,7 +193,7 @@ build a complete foreign function call. For example, the ``putStr``
 function is implemented as follows, as a call to an external function
 ``putStr`` defined in the run-time system:
 
-.. code-block:: idris
+.. code-block::
 
     putStr : String -> IO ()
     putStr x = mkForeign (FFun "putStr" [FString] FUnit) x
@@ -233,7 +233,7 @@ tested using the special REPL command ``:x EXPR``, and C libraries can
 be dynamically loaded in the interpreter by using the ``:dynamic``
 command or the ``%dynamic`` directive. For example:
 
-.. code-block:: idris
+.. code-block::
 
     Idris> :dynamic libm.so
     Idris> :x unsafePerformIO ((mkForeign (FFun "sin" [FFloat] FFloat)) 1.6)
@@ -257,7 +257,7 @@ used as any other value, including as an index in types.
 Type providers are still an experimental extension. To enable the
 extension, use the ``%language`` directive:
 
-.. code-block:: idris
+.. code-block::
 
     %language TypeProviders
 
@@ -269,7 +269,7 @@ reads a text file. If the file consists of the string ``Int``, then the
 type ``Int`` will be provided. Otherwise, it will provide the type
 ``Nat``.
 
-.. code-block:: idris
+.. code-block::
 
     strToType : String -> Type
     strToType "Int" = Int
@@ -281,7 +281,7 @@ type ``Int`` will be provided. Otherwise, it will provide the type
 
 We then use the ``%provide`` directive:
 
-.. code-block:: idris
+.. code-block::
 
     %provide (T1 : Type) with fromFile "theType"
 
@@ -297,7 +297,7 @@ the provider. If the result is ``Provide t``, then ``T1`` is defined as
 
 Our datatype ``Provider t`` has the following definition:
 
-.. code-block:: idris
+.. code-block::
 
     data Provider a = Error String
                     | Provide a
@@ -335,7 +335,7 @@ In order to view the generated C code, compile via :
 To turn optimisations on, use the ``%flag C`` pragma within the code, as
 is shown below :
 
-.. code-block:: idris
+.. code-block::
 
     module Main
     %flag C "-O3"
@@ -397,7 +397,7 @@ a piece of *JavaScript* code.
 
 One could use the primitive addition of *JavaScript* like so:
 
-.. code-block:: idris
+.. code-block::
 
     module Main
 
@@ -417,7 +417,7 @@ percent sign rather than a position simply use ``%%`` instead.
 Passing functions to a foreign function is very similar. Let’s assume
 that we want to call the following function from the *JavaScript* world:
 
-.. code-block:: idris
+.. code-block::
 
     function twice(f, x) {
       return f(f(x));
@@ -432,7 +432,7 @@ you give it something of type ``FFunction``. The following example code
 calls ``twice`` in *JavaScript* and returns the result to our Idris
 program:
 
-.. code-block:: idris
+.. code-block::
 
     module Main
 
@@ -465,13 +465,13 @@ this like so:
 
 For *NodeJS*:
 
-.. code-block:: idris
+.. code-block::
 
       %include Node "path/to/external.js"
 
 And for use in the browser:
 
-.. code-block:: idris
+.. code-block::
 
       %include JavaScript "path/to/external.js"
 
@@ -483,7 +483,7 @@ Including *NodeJS* modules
 The *NodeJS* code generator can also include modules with the ``%lib``
 directive.
 
-.. code-block:: idris
+.. code-block::
 
       %lib Node "fs"
 
@@ -528,7 +528,7 @@ If ``Type`` were its own type, it would lead to an inconsistency due to
 `Girard’s paradox <http://www.cs.cmu.edu/afs/cs.cmu.edu/user/kw/www/scans/girard72thesis.pdf>`_ , so internally there is a
 *hierarchy* of types (or *universes*):
 
-.. code-block:: idris
+.. code-block::
 
     Type : Type 1 : Type 2 : Type 3 : ...
 
@@ -538,7 +538,7 @@ such universe constraints and reports an error if any inconsistencies
 are found. Ordinarily, a programmer does not need to worry about this,
 but it does prevent (contrived) programs such as the following:
 
-.. code-block:: idris
+.. code-block::
 
     myid : (a : Type) -> a -> a
     myid _ x = x

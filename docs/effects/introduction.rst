@@ -23,7 +23,7 @@ Consider, for example, the following introductory function which
 illustrates the kind of properties which can be expressed in the type
 system:
 
-.. code-block:: idris
+.. code-block::
 
    vadd : Vect n Int -> Vect n Int -> Vect n Int
    vadd []        []        = []
@@ -57,7 +57,7 @@ To give an idea of how programs with effects look in , here is the
 ubiquitous “Hello world” program, written using the ``Effects``
 library:
 
-.. code-block:: idris
+.. code-block::
 
    module Main
 

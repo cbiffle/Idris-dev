@@ -15,7 +15,7 @@ One way to write proofs interactively is to write the general *structure* of
 the proof, and use the interactive mode to complete the details.
 Consider the following definition, proved in :ref:`sect-theorems`:
 
-.. code-block:: idris
+.. code-block::
 
     plusReduces : (n:Nat) -> plus Z n = n
 
@@ -23,7 +23,7 @@ We’ll be constructing the proof by *induction*, so we write the cases for ``Z`
 and ``S``, with a recursive call in the ``S`` case giving the inductive
 hypothesis, and insert *holes* for the rest of the definition:
 
-.. code-block:: idris
+.. code-block::
 
     plusReducesZ' : (n:Nat) -> n = plus n Z
     plusReducesZ' Z     = ?plusredZ_Z
@@ -36,13 +36,13 @@ prompt to find out which holes are still to be solved (or, more
 precisely, which functions exist but have no definitions), then the
 ``:t`` command to see their types:
 
-.. code-block:: idris
+.. code-block::
 
     *theorems> :m
     Global holes:
             [plusredZ_S,plusredZ_Z]
 
-.. code-block:: idris
+.. code-block::
 
     *theorems> :t plusredZ_Z
     plusredZ_Z : Z = plus Z Z
@@ -53,7 +53,7 @@ precisely, which functions exist but have no definitions), then the
 The ``:p`` command enters interactive proof mode, which can be used to
 complete the missing definitions.
 
-.. code-block:: idris
+.. code-block::
 
     *theorems> :p plusredZ_Z
 
@@ -65,7 +65,7 @@ and the current goal (below the line; named ``{hole0}`` here). At the
 prompt we can enter tactics to direct the construction of the proof. In
 this case, we can normalise the goal with the ``compute`` tactic:
 
-.. code-block:: idris
+.. code-block::
 
     -plusredZ_Z> compute
 
@@ -77,7 +77,7 @@ Now we have to prove that ``Z`` equals ``Z``, which is easy to prove by
 introduces subgoals for each of the function’s explicit arguments
 (``Refl`` has none):
 
-.. code-block:: idris
+.. code-block::
 
     -plusredZ_Z> refine Refl
     plusredZ_Z: no more goals
@@ -88,14 +88,14 @@ the local context. When a proof is complete, we use the ``qed`` tactic
 to add the proof to the global context, and remove the hole from the
 unsolved holes list. This also outputs a trace of the proof:
 
-.. code-block:: idris
+.. code-block::
 
     -plusredZ_Z> qed
     plusredZ_Z = proof
         compute
         refine Refl
 
-.. code-block:: idris
+.. code-block::
 
     *theorems> :m
     Global holes:
@@ -105,7 +105,7 @@ The ``:addproof`` command, at the interactive prompt, will add the proof
 to the source file (effectively in an appendix). Let us now prove the
 other required lemma, ``plusredZ_S``:
 
-.. code-block:: idris
+.. code-block::
 
     *theorems> :p plusredZ_S
 
@@ -118,7 +118,7 @@ containing the result of the recursive call. We can introduce these as
 premises using the ``intro`` tactic twice (or ``intros``, which
 introduces all arguments as premises). This gives:
 
-.. code-block:: idris
+.. code-block::
 
       k : Nat
       ih : k = plus k Z
@@ -128,7 +128,7 @@ introduces all arguments as premises). This gives:
 Since plus is defined by recursion on its first argument, the term
 ``plus (S k) Z`` in the goal can be simplified, so we use ``compute``.
 
-.. code-block:: idris
+.. code-block::
 
       k : Nat
       ih : k = plus k Z
@@ -139,7 +139,7 @@ We know, from the type of ``ih``, that ``k = plus k Z``, so we would
 like to use this knowledge to replace ``plus k Z`` in the goal with
 ``k``. We can achieve this with the ``rewrite`` tactic:
 
-.. code-block:: idris
+.. code-block::
 
     -plusredZ_S> rewrite ih
 
@@ -154,7 +154,7 @@ The ``rewrite`` tactic takes an equality proof as an argument, and tries
 to rewrite the goal using that proof. Here, it results in an equality
 which is trivially provable:
 
-.. code-block:: idris
+.. code-block::
 
     -plusredZ_S> trivial
     plusredZ_S: no more goals

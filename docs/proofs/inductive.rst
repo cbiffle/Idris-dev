@@ -6,7 +6,7 @@ Before embarking on proving ``plus_commutes`` in Idris itself, let us
 consider the overall structure of a proof of some property of natural
 numbers. Recall that they are defined recursively, as follows:
 
-.. code-block:: idris
+.. code-block::
 
     data Nat : Type where
          Z : Nat
@@ -18,7 +18,7 @@ all inputs are covered, and that all recursive calls are on
 *structurally smaller* values (so recursion will always reach a base
 case). Recalling ``plus``:
 
-.. code-block:: idris
+.. code-block::
 
     plus : Nat -> Nat -> Nat
     plus Z     m = m
@@ -48,7 +48,7 @@ show that there is a ``Nat`` arising when ``n = S k`` and we know we can
 get a ``Nat`` inductively from ``plus k m``. We could even write a
 function capturing all such inductive definitions:
 
-.. code-block:: idris
+.. code-block::
 
     nat_induction : (P : Nat -> Type) ->             -- Property to show
                     (P Z) ->                         -- Base case
@@ -61,7 +61,7 @@ function capturing all such inductive definitions:
 Using ``nat_induction``, we can implement an equivalent inductive
 version of ``plus``:
 
-.. code-block:: idris
+.. code-block::
 
     plus_ind : Nat -> Nat -> Nat
     plus_ind n m

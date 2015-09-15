@@ -20,7 +20,7 @@ Effects are described by *algebraic data types*, where the
 constructors describe the operations provided when the effect is
 available. Stateful operations are described as follows:
 
-.. code-block:: idris
+.. code-block::
 
     data State : Effect where
          Get :      State a  a (\x => a)
@@ -29,7 +29,7 @@ available. Stateful operations are described as follows:
 ``Effect`` itself is a type synonym, giving the required type for an
 effect signature:
 
-.. code-block:: idris
+.. code-block::
 
     Effect : Type
     Effect = (result : Type) ->
@@ -50,7 +50,7 @@ which can make effect signatures more concise, particularly when the
 result has no effect on the resource type. For ``State``, we can
 write:
 
-.. code-block:: idris
+.. code-block::
 
     data State : Effect where
          Get :      sig State a  a
@@ -60,7 +60,7 @@ There are four versions of ``sig``, depending on whether we
 are interested in the resource type, and whether we are updating the
 resource. Idris will infer the appropriate version from usage.
 
-.. code-block:: idris
+.. code-block::
 
     NoResourceEffect.sig : Effect -> Type -> Type
     NoUpdateEffect.sig   : Effect -> (ret : Type) -> 
@@ -75,7 +75,7 @@ resource. Idris will infer the appropriate version from usage.
 In order to convert ``State`` (of type ``Effect``) into something
 usable in an effects list, of type ``EFFECT``, we write the following:
 
-.. code-block:: idris
+.. code-block::
 
     STATE : Type -> EFFECT
     STATE t = MkEff t State
@@ -84,7 +84,7 @@ usable in an effects list, of type ``EFFECT``, we write the following:
 the ``t`` which parameterises ``STATE``) and the effect signature
 (here, ``State``). For reference, ``EFFECT`` is declared as follows:
 
-.. code-block:: idris
+.. code-block::
 
     data EFFECT : Type where
          MkEff : Type -> Effect -> EFFECT
@@ -95,7 +95,7 @@ computation context ``m``. For each effect, therefore, we must explain
 how it is executed in a particular computation context for ``run`` to
 work in that context. This is achieved with the following type class:
 
-.. code-block:: idris
+.. code-block::
 
     class Handler (e : Effect) (m : Type -> Type) where
           handle : resource -> (eff : e t resource resource') ->
@@ -121,7 +121,7 @@ A ``Handler`` for ``State`` simply passes on the value of the state,
 in the case of ``Get``, or passes on a new state, in the case of
 ``Put``.  It is defined the same way for all computation contexts:
 
-.. code-block:: idris
+.. code-block::
 
     instance Handler State m where
          handle st Get     k = k st st
@@ -131,7 +131,7 @@ This gives enough information for ``Get`` and ``Put`` to be used
 directly in ``Eff`` programs. It is tidy, however, to define top level
 functions in ``Eff``, as follows:
 
-.. code-block:: idris
+.. code-block::
 
     get : Eff x [STATE x]
     get = call Get
@@ -147,7 +147,7 @@ an ``Effect`` to a function in ``Eff``, given a proof that the effect
 is available. This proof can be constructed automatically by , since
 it is essentially an index into a statically known list of effects:
 
-.. code-block:: idris
+.. code-block::
 
     call : {e : Effect} ->
            (eff : e t a b) -> {auto prf : EffElem e a xs} ->
@@ -167,7 +167,7 @@ Summary
 The following listing summarises what is required to define the
 ``STATE`` effect:
 
-.. code-block:: idris
+.. code-block::
 
     data State : Effect where
          Get :      sig State a  a
@@ -203,7 +203,7 @@ since the handlers merely apply the ``IO`` equivalents of the effects
 directly.
 
 .. _eff-stdiodef:
-.. code-block:: idris
+.. code-block::
 
     data StdIO : Effect where
          PutStr : String -> sig StdIO ()
@@ -236,7 +236,7 @@ definitions of these handlers is that the continuation ``k`` is not
 used. Running ``Raise`` therefore means that computation stops with an
 error.
 
-.. code-block:: idris
+.. code-block::
 
     data Exception : Type -> Effect where
          Raise : a -> sig (Exception a) b
@@ -260,7 +260,7 @@ effect for writing non-deterministic programs, including a handler for
 handler for ``Maybe`` context which returns the first successful
 value.
 
-.. code-block:: idris
+.. code-block::
 
     data Selection : Effect where
          Select : List a -> sig Selection a
@@ -294,7 +294,7 @@ transitions ``{ x ==> {res} x’ }``, where the result state ``x’`` is
 computed from the result of the operation ``res``, follows that for
 the equivalent ``Eff`` programs.
 
-.. code-block:: idris
+.. code-block::
 
     data FileIO : Effect where
          Open : (fname: String)

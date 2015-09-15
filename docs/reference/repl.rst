@@ -24,7 +24,7 @@ as being easier to implement (because we have the evaluator available) this can
 be very useful to show how terms evaluate in the type checker. So you can see
 the difference between:
 
-.. code-block:: idris
+.. code-block::
 
     Idris> \n, m => (S n) + m
     \n => \m => S (plus n m) : Nat -> Nat -> Nat

@@ -39,7 +39,7 @@ On their own, tactics have no effect.
 The meta-operation ``%runElab script`` runs ``script`` in the current elaboration context.
 For example, the following script constructs the identity function at type ``Nat``:
 
-.. code-block:: idris
+.. code-block::
 
     idNat : Nat -> Nat
     idNat = %runElab (do intro (Just (UN "x"))
@@ -59,7 +59,7 @@ Because elaborator scripts are ordinary Idris expressions, it is also possible t
 Note that there is nothing ``Nat``-specific about the above script.
 We can generate identity functions at any concrete type using the same script:
 
-.. code-block:: idris
+.. code-block::
 
     mkId : Elab ()
     mkId = do intro (Just (UN "x"))
@@ -104,7 +104,7 @@ Querying the Elaboration State
 The ordinary Idris bind syntax can be used to propagate this information.
 For example, a tactic that solves the current goal when it is the unit type might look like this:
 
-.. code-block:: idris
+.. code-block::
 
     triv : Elab ()
     triv = do compute

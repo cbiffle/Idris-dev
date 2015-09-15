@@ -42,7 +42,7 @@ Furthermore, the Idris type system allows us to state precisely the type
 of each value, and therefore the run-time form of each value. In a lazy
 language, consider a value of type ``Int``:
 
-.. code-block:: idris
+.. code-block::
 
     thing : Int
 
@@ -51,7 +51,7 @@ representing an integer, or is it a pointer to some code which will compute
 an integer? In Idris, we have decided that we would like to make this
 distinction precise, in the type:
 
-.. code-block:: idris
+.. code-block::
 
     thing_val : Int
     thing_comp : Lazy Int
@@ -68,7 +68,7 @@ example, ``if...then...else...`` in Idris expands to an application of
 a function named ``ifThenElse``. The default implementation for
 Booleans is defined as follows in the library:
 
-.. code-block:: idris
+.. code-block::
 
     ifThenElse : Bool -> (t : Lazy a) -> (e : Lazy a) -> a
     ifThenElse True  t e = t
@@ -95,7 +95,7 @@ as being easier to implement (because we have the evaluator available) this can
 be very useful to show how terms evaluate in the type checker. So you can see
 the difference between:
 
-.. code-block:: idris
+.. code-block::
 
     Idris> \n, m => (S n) + m
     \n => \m => S (plus n m) : Nat -> Nat -> Nat

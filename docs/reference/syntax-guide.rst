@@ -17,9 +17,7 @@ Source files consist of:
 .. Should that last bullet become more specific?  Terminologically I'm not even
    certain what the top-level entities in an Idris file are properly called.
 
-For example:
-
-.. code-block:: idris
+For example::
 
     module MyModule   -- module header
 
@@ -81,9 +79,7 @@ value on the next line, using the syntax
     <id> : <type>
     <id> = <value>
 
-Examples
-
-.. code-block:: idris
+Examples::
 
     x : Int
     x = 100
@@ -95,16 +91,12 @@ Types
 
 In Idris, types are first class values. So a type declaration is the
 same as just declaration of a variable whose type is ``Type``. In Idris,
-variables that denote a type must begin with a capital letter. Example:
-
-.. code-block:: idris
+variables that denote a type must begin with a capital letter. Example::
 
     MyIntType : Type
     MyIntType = Int
 
-a more interesting example:
-
-.. code-block:: idris
+a more interesting example::
 
     MyListType : Type
     MyListType = List Int
@@ -115,24 +107,18 @@ Data types
 ~~~~~~~~~~
 
 Idris provides two kinds of syntax for defining data types. The first,
-Haskell style syntax, defines a regular algebraic data type. For example
-
-.. code-block:: idris
+Haskell style syntax, defines a regular algebraic data type. For example::
 
     data Either a b = Left a | Right b
 
-or
-
-.. code-block:: idris
+or::
 
     data List a = Nil | (::) a (List a)
 
 The second, more general kind of data type, is defined using Agda or
 GADT style syntax. This syntax defines a data type that is parameterised
 by some values (in the ``Vect`` example, a value of type ``Nat`` and a
-value of type ``Type``).
-
-.. code-block:: idris
+value of type ``Type``). ::
 
     data Vect : Nat -> Type -> Type where
       Nil  : Vect Z a
@@ -208,16 +194,12 @@ followed by the definition.
     <id> : <argument type> -> <return type>
     <id> arg = <expr>
 
-Example
-
-.. code-block:: idris
+Example::
 
     plusOne : Int -> Int
     plusOne x = x + 1
 
-Functions can also have multiple inputs, for example
-
-.. code-block:: idris
+Functions can also have multiple inputs, for example::
 
     makeHello : String -> String -> String
     makeHello first last = "hello, my name is " ++ first ++ " " ++ last
@@ -225,9 +207,7 @@ Functions can also have multiple inputs, for example
 Functions can also have named arguments. This is required if you want to
 annotate parameters in a docstring. The following shows the same
 ``makeHello`` function as above, but with named parameters which are
-also annotated in the docstring
-
-.. code-block:: idris
+also annotated in the docstring::
 
     ||| Makes a string introducing a person
     ||| @first The person's first name
@@ -236,17 +216,13 @@ also annotated in the docstring
     makeHello first last = "hello, my name is " ++ first ++ " " ++ last
 
 Like Haskell, Idris functions can be defined by pattern matching. For
-example
-
-.. code-block:: idris
+example::
 
     sum : List Int -> Int
     sum []        = 0
     sum (x :: xs) = x + (sum xs)
 
-Similarly case analysis looks like
-
-.. code-block:: idris
+Similarly, case analysis looks like::
 
     answerString : Bool -> String
     answerString False = "Wrong answer"
@@ -258,9 +234,7 @@ Dependent Functions
 Dependent functions are functions where the type of the return value
 depends on the input value. In order to define a dependent function,
 named parameters must be used, since the parameter will appear in the
-return type. For example, consider
-
-.. code-block:: idris
+return type. For example, consider::
 
     zeros : (n : Nat) -> Vect n Int
     zeros Z     = []
@@ -268,9 +242,7 @@ return type. For example, consider
 
 In this example, the return type is ``Vect n Int`` which is an
 expression which depends on the input parameter ``n``. ### Anonymous
-Arguments in anonymous functions are separated by comma.
-
-.. code-block:: none
+Arguments in anonymous functions are separated by comma. ::
 
     (\x => <expr>)
     (\x, y => <expr>)

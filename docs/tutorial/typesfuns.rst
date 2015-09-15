@@ -16,7 +16,7 @@ these types. Enter the following into a file ``Prims.idr`` and load it
 into the Idris interactive environment by typing ``idris
 Prims.idr``:
 
-.. code-block:: idris
+.. code-block::
 
     module Prims
 
@@ -78,7 +78,7 @@ Data types are declared in a similar way and with similar syntax to
 Haskell. Natural numbers and lists, for example, can be declared as
 follows:
 
-.. code-block:: idris
+.. code-block::
 
     data Nat    = Z   | S Nat           -- Natural numbers
                                         -- (zero and successor)
@@ -92,7 +92,7 @@ declaration for ``List``, we used an infix operator ``::``. New
 operators such as this can be added using a fixity declaration, as
 follows:
 
-.. code-block:: idris
+.. code-block::
 
     infixr 10 ::
 
@@ -119,7 +119,7 @@ than Haskell’s double colon ``::``). Some natural number arithmetic
 functions can be defined as follows, again taken from the standard
 library:
 
-.. code-block:: idris
+.. code-block::
 
     -- Unary addition
     plus : Nat -> Nat -> Nat
@@ -187,7 +187,7 @@ example, to define a function which reverses a list, we can use an
 auxiliary function which accumulates the new, reversed list, and which
 does not need to be visible globally:
 
-.. code-block:: idris
+.. code-block::
 
     reverse : List a -> List a
     reverse xs = revAcc [] xs where
@@ -210,7 +210,7 @@ As well as functions, ``where`` blocks can include local data
 declarations, such as the following where ``MyLT`` is not accessible
 outside the definition of ``foo``:
 
-.. code-block:: idris
+.. code-block::
 
     foo : Int -> Int
     foo x = case isLT of
@@ -233,7 +233,7 @@ declaration for a function ``f`` *can* be omitted if:
 
 So, for example, the following definitions are legal:
 
-.. code-block:: idris
+.. code-block::
 
     even : Nat -> Bool
     even Z = True
@@ -259,7 +259,7 @@ can be computed and manipulated (and passed to functions) just like any
 other language construct. For example, we could write a function which
 computes a type:
 
-.. code-block:: idris
+.. code-block::
 
     isSingleton : Bool -> Type
     isSingleton True = Nat
@@ -270,7 +270,7 @@ whether the type should be a singleton or not. We can use this function
 to calculate a type anywhere that a type can be used. For example, it
 can be used to calculate a return type:
 
-.. code-block:: idris
+.. code-block::
 
     mkSingle : (x : Bool) -> isSingleton x
     mkSingle True = 0
@@ -280,7 +280,7 @@ Or it can be used to have varying input types. The following function
 calculates either the sum of a list of ``Nat``, or returns the given
 ``Nat``, depending on whether the singleton flag is true:
 
-.. code-block:: idris
+.. code-block::
 
     sum : (single : Bool) -> isSingleton single -> Nat
     sum True x = x
@@ -295,7 +295,7 @@ length”, conventionally called vectors in the dependent type
 literature.  They are available as part of the Idris library, by
 importing ``Data.Vect``, or we can declare them as follows:
 
-.. code-block:: idris
+.. code-block::
 
     data Vect : Nat -> Type -> Type where
        Nil  : Vect Z a
@@ -325,7 +325,7 @@ matching. The type of a function over ``Vect`` will describe what
 happens to the lengths of the vectors involved. For example, ``++``,
 defined as follows, appends two ``Vect``:
 
-.. code-block:: idris
+.. code-block::
 
     (++) : Vect n a -> Vect m a -> Vect (n + m) a
     (++) Nil       ys = ys
@@ -336,7 +336,7 @@ the sum of the input lengths. If we get the definition wrong in such a
 way that this does not hold, Idris will not accept the definition.
 For example:
 
-.. code-block:: idris
+.. code-block::
 
     (++) : Vect n a -> Vect m a -> Vect (n + m) a
     (++) Nil       ys = ys
@@ -373,7 +373,7 @@ Finite sets, as the name suggests, are sets with a finite number of
 elements. They are available as part of the Idris library, by
 importing ``Data.Fin``, or can be declared as follows:
 
-.. code-block:: idris
+.. code-block::
 
     data Fin : Nat -> Type where
        FZ : Fin (S k)
@@ -403,7 +403,7 @@ For example, the following function which looks up an element in a
 ``Vect``, by a bounded index given as a ``Fin n``, is defined in the
 prelude:
 
-.. code-block:: idris
+.. code-block::
 
     index : Fin n -> Vect n a -> a
     index FZ     (x :: xs) = x
@@ -426,7 +426,7 @@ Implicit Arguments
 
 Let us take a closer look at the type of ``index``:
 
-.. code-block:: idris
+.. code-block::
 
     index : Fin n -> Vect n a -> a
 
@@ -436,7 +436,7 @@ names, ``n`` and ``a``, which are not declared explicitly. These are
 *implicit* arguments to ``index``. We could also write the type of
 ``index`` as:
 
-.. code-block:: idris
+.. code-block::
 
     index : {a:Type} -> {n:Nat} -> Fin n -> Vect n a -> a
 
@@ -450,14 +450,14 @@ bound as an implicit argument. Implicit arguments can still be given
 explicitly in applications, using ``{a=value}`` and ``{n=value}``, for
 example:
 
-.. code-block:: idris
+.. code-block::
 
     index {a=Int} {n=2} FZ (2 :: 3 :: Nil)
 
 In fact, any argument, implicit or explicit, may be given a name. We
 could have declared the type of ``index`` as:
 
-.. code-block:: idris
+.. code-block::
 
     index : (i:Fin n) -> (xs:Vect n a) -> a
 
@@ -474,7 +474,7 @@ implicit arguments themselves have dependencies. For example, we may
 wish to state the types of the implicit arguments in the following
 definition, which defines a predicate on vectors:
 
-.. code-block:: idris
+.. code-block::
 
     data Elem : a -> Vect n a -> Type where
        Here :  {x:a} ->   {xs:Vect n a} -> Elem x (x :: xs)
@@ -485,7 +485,7 @@ An instance of ``Elem x xs`` states that ``x`` is an element of
 ``Here``, at the head of the vector, or ``There``, in the tail of the
 vector. For example:
 
-.. code-block:: idris
+.. code-block::
 
     testVec : Vect 4 Int
     testVec = 3 :: 4 :: 5 :: 6 :: Nil
@@ -498,7 +498,7 @@ definition difficult to read. To avoid this problem, a ``using`` block
 gives the types and ordering of any implicit arguments which can
 appear within the block:
 
-.. code-block:: idris
+.. code-block::
 
     using (x:a, y:a, xs:Vect n a)
       data Elem : a -> Vect n a -> Type where
@@ -514,7 +514,7 @@ reduction behaviour to affect type checking. However, this restriction
 can be relaxed by using a ``mutual`` block, which allows data types
 and functions to be defined simultaneously:
 
-.. code-block:: idris
+.. code-block::
 
     mutual
       even : Nat -> Bool
@@ -539,7 +539,7 @@ as Idris — that is, a language where expressions do not have
 side-effects — is that I/O is inherently side-effecting. Therefore in
 Idris, such interactions are encapsulated in the type ``IO``:
 
-.. code-block:: idris
+.. code-block::
 
     data IO a -- IO operation returning a value of type a
 
@@ -548,7 +548,7 @@ describes what the I/O operations to be executed are, rather than how
 to execute them. The resulting operations are executed externally, by
 the run-time system. We’ve already seen one IO program:
 
-.. code-block:: idris
+.. code-block::
 
     main : IO ()
     main = putStrLn "Hello world"
@@ -557,21 +557,21 @@ The type of ``putStrLn`` explains that it takes a string, and returns
 an element of the unit type ``()`` via an I/O action. There is a
 variant ``putStr`` which outputs a string without a newline:
 
-.. code-block:: idris
+.. code-block::
 
     putStrLn : String -> IO ()
     putStr   : String -> IO ()
 
 We can also read strings from user input:
 
-.. code-block:: idris
+.. code-block::
 
     getLine : IO String
 
 A number of other I/O operations are defined in the prelude, for
 example for reading and writing files, including:
 
-.. code-block:: idris
+.. code-block::
 
     data File -- abstract
     data Mode = Read | Write | ReadWrite
@@ -595,7 +595,7 @@ output of one computation into the input of the next. ``IO`` is an
 abstract type, however, so we can’t access the result of a computation
 directly.  Instead, we sequence operations with ``do`` notation:
 
-.. code-block:: idris
+.. code-block::
 
     greet : IO ()
     greet = do putStr "What is your name? "
@@ -609,7 +609,7 @@ has type ``String``. Indentation is significant — each statement in
 the do block must begin in the same column. The ``return`` operation
 allows us to inject a value directly into an IO operation:
 
-.. code-block:: idris
+.. code-block::
 
     return : a -> IO a
 
@@ -625,7 +625,7 @@ Normally, arguments to functions are evaluated before the function
 itself (that is, Idris uses *eager* evaluation). However, this is
 not always the best approach. Consider the following function:
 
-.. code-block:: idris
+.. code-block::
 
     ifThenElse : Bool -> a -> a -> a;
     ifThenElse True  t e = t;
@@ -637,7 +637,7 @@ as we will see later. We would prefer if *only* the argument which was
 used was evaluated. To achieve this, Idris provides a ``Lazy``
 data type, which allows evaluation to be suspended:
 
-.. code-block:: idris
+.. code-block::
 
     data Lazy : Type -> Type where
          Delay : (val : a) -> Lazy a
@@ -650,7 +650,7 @@ and inserts conversions where necessary between ``Lazy a`` and ``a``,
 and vice versa. We can therefore write ``ifThenElse`` as follows,
 without any explicit use of ``Force`` or ``Delay``:
 
-.. code-block:: idris
+.. code-block::
 
     ifThenElse : Bool -> Lazy a -> Lazy a -> a;
     ifThenElse True  t e = t;
@@ -669,7 +669,7 @@ automatically by every Idris program, as part of ``Prelude.idr``.
 
 We have already seen the ``List`` and ``Vect`` data types:
 
-.. code-block:: idris
+.. code-block::
 
     data List a = Nil | (::) a (List a)
 
@@ -692,7 +692,7 @@ The library also defines a number of functions for manipulating these
 types. ``map`` is overloaded both for ``List`` and ``Vect`` and
 applies a function to every element of the list or vector.
 
-.. code-block:: idris
+.. code-block::
 
     map : (a -> b) -> List a -> List b
     map f []        = []
@@ -705,7 +705,7 @@ applies a function to every element of the list or vector.
 For example, given the following vector of integers, and a function to
 double an integer:
 
-.. code-block:: idris
+.. code-block::
 
     intVec : Vect 5 Int
     intVec = [1, 2, 3, 4, 5]
@@ -770,7 +770,7 @@ Maybe
 ``Maybe`` describes an optional value. Either there is a value of the
 given type, or there isn’t:
 
-.. code-block:: idris
+.. code-block::
 
     data Maybe a = Just a | Nothing
 
@@ -778,7 +778,7 @@ given type, or there isn’t:
 fail. For example, looking something up in a ``List`` (rather than a
 vector) may result in an out of bounds error:
 
-.. code-block:: idris
+.. code-block::
 
     list_lookup : Nat -> List a -> Maybe a
     list_lookup _     Nil         = Nothing
@@ -789,7 +789,7 @@ The ``maybe`` function is used to process values of type ``Maybe``,
 either by applying a function to the value, if there is one, or by
 providing a default value:
 
-.. code-block:: idris
+.. code-block::
 
     maybe : Lazy b -> (a -> b) -> Maybe a -> b
 
@@ -803,7 +803,7 @@ Tuples
 
 Values can be paired with the following built-in data type:
 
-.. code-block:: idris
+.. code-block::
 
     data Pair a b = MkPair a b
 
@@ -811,7 +811,7 @@ As syntactic sugar, we can write ``(a, b)`` which, according to
 context, means either ``Pair a b`` or ``MkPair a b``. Tuples can
 contain an arbitrary number of values, represented as nested pairs:
 
-.. code-block:: idris
+.. code-block::
 
     fred : (String, Int)
     fred = ("Fred", 42)
@@ -826,7 +826,7 @@ Dependent pairs allow the type of the second element of a pair to depend
 on the value of the first element. Traditionally, these are referred to
 as “sigma types”:
 
-.. code-block:: idris
+.. code-block::
 
     data Sigma : (a : Type) -> (P : a -> Type) -> Type where
        MkSigma : {P : a -> Type} -> (x : a) -> P x -> Sigma a P
@@ -836,7 +836,7 @@ of a pair of A and P, where the name ``a`` can occur inside ``P``.
 ``( a ** p )`` constructs a value of this type. For example, we can
 pair a number with a ``Vect`` of a particular length.
 
-.. code-block:: idris
+.. code-block::
 
     vec : (n : Nat ** Vect n Int)
     vec = (2 ** [3, 4])
@@ -844,7 +844,7 @@ pair a number with a ``Vect`` of a particular length.
 If you like, you can write it out the long way, the two are precisely
 equivalent.
 
-.. code-block:: idris
+.. code-block::
 
     vec : Sigma Nat (\n => Vect n Int)
     vec = MkSigma 2 [3, 4]
@@ -854,7 +854,7 @@ from the length of the vector. We can write an underscore ``_`` in
 place of values which we expect the type checker to fill in, so the
 above definition could also be written as:
 
-.. code-block:: idris
+.. code-block::
 
     vec : (n : Nat ** Vect n Int)
     vec = (_ ** [3, 4])
@@ -862,7 +862,7 @@ above definition could also be written as:
 We might also prefer to omit the type of the first element of the
 pair, since, again, it can be inferred:
 
-.. code-block:: idris
+.. code-block::
 
     vec : (n ** Vect n Int)
     vec = (_ ** [3, 4])
@@ -873,13 +873,13 @@ we filter elements out of a ``Vect`` according to some predicate, we
 will not know in advance what the length of the resulting vector will
 be:
 
-.. code-block:: idris
+.. code-block::
 
     filter : (a -> Bool) -> Vect n a -> (p ** Vect p a)
 
 If the ``Vect`` is empty, the result is easy:
 
-.. code-block:: idris
+.. code-block::
 
     filter p Nil = (_ ** [])
 
@@ -888,7 +888,7 @@ to ``filter`` to extract the length and the vector from the result. To
 do this, we use ``with`` notation, which allows pattern matching on
 intermediate values:
 
-.. code-block:: idris
+.. code-block::
 
     filter p (x :: xs) with (filter p xs)
       | ( _ ** xs' ) = if (p x) then ( _ ** x :: xs' ) else ( _ ** xs' )
@@ -906,7 +906,7 @@ the syntax used for data structures, records in Idris follow a
 different syntax to that seen with Haskell. For example, we can
 represent a person's name and age in a record:
 
-.. code-block:: idris
+.. code-block::
 
     record Person where
         constructor MkPerson
@@ -951,7 +951,7 @@ Records, and fields within records, can have dependent types. Updates
 are allowed to change the type of a field, provided that the result is
 well-typed.
 
-.. code-block:: idris
+.. code-block::
 
     record Class where
         constructor ClassInfo
@@ -961,7 +961,7 @@ well-typed.
 It is safe to update the ``students`` field to a vector of a different
 length because it will not affect the type of the record:
 
-.. code-block:: idris
+.. code-block::
 
     addStudent : Person -> Class -> Class
     addStudent p c = record { students = p :: students c } c
@@ -980,7 +980,7 @@ nested records. For example, if a field is accessible with the
 expression ``c (b (a x))``, it can be updated using the following
 syntax:
 
-.. code-block:: idris
+.. code-block::
 
     record { a->b->c = val } x
 
@@ -989,7 +989,7 @@ This returns a new record, with the field accessed by the path
 a->b->c = val }`` itself has a function type. Symmetrically, the field
 can also be accessed with the following syntax:
 
-.. code-block:: idris
+.. code-block::
 
     record { a->b->c } x
 
@@ -1002,7 +1002,7 @@ are not subject to field updates. The parameters appear as arguments
 to the resulting type, and are written following the record type
 name. For example, a pair type could be defined as follows:
 
-.. code-block:: idris
+.. code-block::
 
     record Prod a b where
         constructor Times
@@ -1016,7 +1016,7 @@ promoted to the type level by parameterising the record with the size.
 Foe example:
 
 
-.. code-block:: idris
+.. code-block::
 
     record SizedClass (size : Nat) where
         constructor SizedClassInfo
@@ -1026,7 +1026,7 @@ Foe example:
 **Note** that it is no longer possible to use the ``addStudent``
 method from earlier as that would change the size of the class. To provide an add student the function must specify in the type that the size of the class has been increased by one. As the size if specified using natural numbers, the new value can be incremented using the successor constructor.
 
-.. code-block:: idris
+.. code-block::
 
     addStudent : Person -> SizedClass n -> SizedClass (S n)
     addStudent p c = record { students = p :: students c } c
@@ -1041,7 +1041,7 @@ More Expressions
 
 Intermediate values can be calculated using ``let`` bindings:
 
-.. code-block:: idris
+.. code-block::
 
     data Person = MkPerson String Int
 
@@ -1053,7 +1053,7 @@ We can do simple pattern matching in ``let`` bindings too. For
 example, we can extract fields from a record as follows, as well as by
 pattern matching at the top level:
 
-.. code-block:: idris
+.. code-block::
 
     data Person = MkPerson String Int
 
@@ -1076,7 +1076,7 @@ This generates the list of values produced by evaluating the
 separated ``qualifiers``. For example, we can build a list of
 Pythagorean triples as follows:
 
-.. code-block:: idris
+.. code-block::
 
     pythag : Int -> List (Int, Int, Int)
     pythag n = [ (x, y, z) | z <- [1..n], y <- [1..z], x <- [1..y],
@@ -1095,7 +1095,7 @@ Another way of inspecting intermediate values of *simple* types is to
 use a ``case`` expression. The following function, for example, splits
 a string into two at a given character:
 
-.. code-block:: idris
+.. code-block::
 
     splitAt : Char -> String -> (String, String)
     splitAt c x = case break (== c) x of
@@ -1113,7 +1113,7 @@ is out of bounds. We can use this to write ``lookup_default``, which
 looks up an index and returns a default value if the index is out of
 bounds:
 
-.. code-block:: idris
+.. code-block::
 
     lookup_default : Nat -> List a -> a -> a
     lookup_default i xs def = case list_lookup i xs of

@@ -27,7 +27,7 @@ backend (or, more precisely, any backend whose foreign function calls
 are compatible with C.) Additionally, there is now an ``IO'`` monad,
 which is parameterised over a FFI descriptor:
 
-.. code-block:: idris
+.. code-block::
 
     data IO' : (lang : FFI) -> Type -> Type
 
@@ -35,7 +35,7 @@ The Prelude defines two FFI descriptors which are imported
 automatically, for C and JavaScript/Node, and defines ``IO`` to use
 the C FFI and ``JS_IO`` to use the JavaScript FFI:
 
-.. code-block:: idris
+.. code-block::
 
     FFI_C  : FFI
     FFI_JS : FFI
@@ -50,7 +50,7 @@ As before, the entry point to an Idris program is ``main``, but the
 type of ``main`` can now be any instance of ``IO'``, e.g. the
 following are both valid:
 
-.. code-block:: idris
+.. code-block::
 
     main : IO ()
     main : JS_IO ()
@@ -68,7 +68,7 @@ An FFI descriptor is a record containing a predicate which holds when
 a type can be marshalled, and the type of the target of a foreign
 call:
 
-.. code-block:: idris
+.. code-block::
 
     record FFI where
          constructor MkFFI
@@ -77,7 +77,7 @@ call:
 
 For C, this is:
 
-.. code-block:: idris
+.. code-block::
 
     ||| Supported C integer types
     data C_IntTypes : Type -> Type where
@@ -105,7 +105,7 @@ Foreign calls
 To call a foreign function, the ``foreign`` function is used. For
 example:
 
-.. code-block:: idris
+.. code-block::
 
     do_fopen : String -> String -> IO Ptr
     do_fopen f m
@@ -128,7 +128,7 @@ because the foreign calls are generated statically. The ``%inline``
 directive on a function can be used to give hints to help this, for
 example a shorthand for calling external JavaScript functions:
 
-.. code-block:: idris
+.. code-block::
 
     %inline
     jscall : (fname : String) -> (ty : Type) ->
@@ -145,7 +145,7 @@ type. It is instructive to look a little deeper, however:
 
 The type of ``foreign`` is as follows:
 
-.. code-block:: idris
+.. code-block::
 
     foreign : (ffi : FFI)
            -> (fname : ffi_fn f)
@@ -157,7 +157,7 @@ The important argument here is the implicit ``fty``, which contains a
 proof (``FTy``) that the given type is valid according to the FFI
 description ``ffi``:
 
-.. code-block:: idris
+.. code-block::
 
     data FTy : FFI -> List Type -> Type -> Type where
          FRet : ffi_types f t -> FTy f xs (IO' f t)
@@ -169,7 +169,7 @@ the type is valid in this FFI. For example, the above ``do_fopen``
 builds the following implicit proof as the ``fty`` argument to
 ``foreign``:
 
-.. code-block:: idris
+.. code-block::
 
     FFun C_Str (FFun C_Str (FRet C_Ptr))
 
@@ -186,7 +186,7 @@ a ``foreign`` call is implemented by the primitive function
 ``mkForeignPrim``. The important part of the IR as defined in
 ``Lang.hs`` is the following constructor:
 
-.. code-block:: idris
+.. code-block::
 
     data LExp = ...
               | LForeign FDesc -- Function descriptor
@@ -202,7 +202,7 @@ type descriptors (also given by an application of ``FTy``).
 An ``FDesc`` describes an application of a name to some arguments, and
 is really just a simplified subset of an ``LExp``:
 
-.. code-block:: idris
+.. code-block::
 
     data FDesc = FCon Name
                | FStr String
@@ -214,7 +214,7 @@ defunctionalised, simplified and bytecode forms.
 
 Our ``do_fopen`` example above arrives in the ``LExp`` form as:
 
-.. code-block:: idris
+.. code-block::
 
     LForeign (FStr "fileOpen") (FCon (sUN "C_Ptr"))
              [(FCon (sUN "C_Str"), f), (FCon (sUN "C_Str"), m)]
@@ -240,7 +240,7 @@ The JavaScript FFI descriptor is a little more complex, because the
 JavaScript FFI supports marshalling functions. It is defined as
 follows:
 
-.. code-block:: idris
+.. code-block::
 
     mutual
       data JsFn t = MkJsFn t
@@ -269,7 +269,7 @@ indices are disjoint! An example of using this appears in `IdrisScript
 <https://github.com/idris-hackers/IdrisScript>`__ when setting
 timeouts:
 
-.. code-block:: idris
+.. code-block::
 
     setTimeout : (() -> JS_IO ()) -> (millis : Int) -> JS_IO Timeout
     setTimeout f millis = do

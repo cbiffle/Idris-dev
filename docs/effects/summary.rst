@@ -10,7 +10,7 @@ library.
 EXCEPTION
 =========
 
-.. code-block:: idris
+.. code-block::
 
     module Effect.Exception
 
@@ -31,7 +31,7 @@ EXCEPTION
 FILE\_IO
 ========
 
-.. code-block:: idris
+.. code-block::
 
     module Effect.File
 
@@ -59,7 +59,7 @@ FILE\_IO
 RND
 ===
 
-.. code-block:: idris
+.. code-block::
 
     module Effect.Random
 
@@ -78,7 +78,7 @@ RND
 SELECT
 ======
 
-.. code-block:: idris
+.. code-block::
 
     module Effect.Select
 
@@ -94,7 +94,7 @@ SELECT
 STATE
 =====
 
-.. code-block:: idris
+.. code-block::
 
     module Effect.State
 
@@ -112,7 +112,7 @@ STATE
 STDIO
 =====
 
-.. code-block:: idris
+.. code-block::
 
     module Effect.StdIO
 
@@ -134,7 +134,7 @@ STDIO
 SYSTEM
 ======
 
-.. code-block:: idris
+.. code-block::
 
     module Effect.System
 

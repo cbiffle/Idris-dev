@@ -13,7 +13,7 @@ down the implicit length arguments to ``(++)``, we’d see that the form
 of the length argument was determined by whether the vector was empty
 or not:
 
-.. code-block:: idris
+.. code-block::
 
     (++) : Vect n a -> Vect m a -> Vect (n + m) a
     (++) {n=Z}   []        ys = ys
@@ -36,7 +36,7 @@ form, the ``with`` rule adds another argument to the function being
 defined, e.g. we have already seen a vector filter function, defined
 as follows:
 
-.. code-block:: idris
+.. code-block::
 
     filter : (a -> Bool) -> Vect n a -> (p ** Vect p a)
     filter p [] = ( _ ** [] )
@@ -53,7 +53,7 @@ of one value by testing another. For example, a ``Nat`` is either even
 or odd. If it’s even it will be the sum of two equal ``Nat``.
 Otherwise, it is the sum of two equal ``Nat`` plus one:
 
-.. code-block:: idris
+.. code-block::
 
     data Parity : Nat -> Type where
        Even : Parity (n + n)
@@ -63,7 +63,7 @@ We say ``Parity`` is a *view* of ``Nat``. It has a *covering function*
 which tests whether it is even or odd and constructs the predicate
 accordingly.
 
-.. code-block:: idris
+.. code-block::
 
     parity : (n:Nat) -> Parity n
 
@@ -72,7 +72,7 @@ to write a function which converts a natural number to a list of
 binary digits (least significant first) as follows, using the ``with``
 rule:
 
-.. code-block:: idris
+.. code-block::
 
     natToBin : Nat -> List Bool
     natToBin Z = Nil

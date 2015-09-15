@@ -17,7 +17,7 @@ Representing Languages
 First, let us define the types in the language. We have integers,
 booleans, and functions, represented by ``Ty``:
 
-.. code-block:: idris
+.. code-block::
 
     data Ty = TyInt | TyBool | TyFun Ty Ty
 
@@ -25,7 +25,7 @@ We can write a function to translate these representations to a concrete
 Idris type — remember that types are first class, so can be
 calculated just like any other value:
 
-.. code-block:: idris
+.. code-block::
 
     interpTy : Ty -> Type
     interpTy TyInt       = Int
@@ -38,20 +38,20 @@ representations of expressions by their type and the types of local
 variables (the context), which we’ll be using regularly as an implicit
 argument, so we define everything in a ``using`` block:
 
-.. code-block:: idris
+.. code-block::
 
     using (G:Vect n Ty)
 
 Expressions are indexed by the types of the local variables, and the type of
 the expression itself:
 
-.. code-block:: idris
+.. code-block::
 
     data Expr : Vect n Ty -> Ty -> Type
 
 The full representation of expressions is:
 
-.. code-block:: idris
+.. code-block::
 
     data HasType : (i : Fin n) -> Vect n Ty -> Ty -> Type where
         Stop : HasType FZ (t :: G) t
@@ -72,7 +72,7 @@ The code above makes use of the ``Vect`` and ``Fin`` types from the
 Idris standard library. We import them because they are not provided
 in the prelude:
 
-.. code-block:: idris
+.. code-block::
 
     import Data.Vect
     import Data.Fin
@@ -86,7 +86,7 @@ indexed*. Variables are represented by a proof of their membership in
 the context, ``HasType i G T``, which is a proof that variable ``i``
 in context ``G`` has type ``T``. This is defined as follows:
 
-.. code-block:: idris
+.. code-block::
 
     data HasType : (i : Fin n) -> Vect n Ty -> Ty -> Type where
         Stop : HasType FZ (t :: G) t
@@ -99,7 +99,7 @@ practice, this means we use ``Stop`` to refer to the most recently
 defined variable, ``Pop Stop`` to refer to the next, and so on, via
 the ``Var`` constructor:
 
-.. code-block:: idris
+.. code-block::
 
     Var : HasType i G t -> Expr G t
 
@@ -110,7 +110,7 @@ lambdas between the definition and the use.
 
 A value carries a concrete representation of an integer:
 
-.. code-block:: idris
+.. code-block::
 
     Val : (x : Int) -> Expr G TyInt
 
@@ -118,21 +118,21 @@ A lambda creates a function. In the scope of a function of type ``a ->
 t``, there is a new local variable of type ``a``, which is expressed
 by the context index:
 
-.. code-block:: idris
+.. code-block::
 
     Lam : Expr (a :: G) t -> Expr G (TyFun a t)
 
 Function application produces a value of type ``t`` given a function
 from ``a`` to ``t`` and a value of type ``a``:
 
-.. code-block:: idris
+.. code-block::
 
     App : Expr G (TyFun a t) -> Expr G a -> Expr G t
 
 We allow arbitrary binary operators, where the type of the operator
 informs what the types of the arguments must be:
 
-.. code-block:: idris
+.. code-block::
 
     Op : (interpTy a -> interpTy b -> interpTy c) ->
          Expr G a -> Expr G b -> Expr G c
@@ -141,7 +141,7 @@ Finally, if expressions make a choice given a boolean. Each branch
 must have the same type, and we will evaluate the branches lazily so
 that only the branch which is taken need be evaluated:
 
-.. code-block:: idris
+.. code-block::
 
     If : Expr G TyBool ->
          Lazy (Expr G a) ->
@@ -160,7 +160,7 @@ that we can use the usual list syntax. Given a proof that a variable
 is defined in the context, we can then produce a value from the
 environment:
 
-.. code-block:: idris
+.. code-block::
 
     data Env : Vect n Ty -> Type where
         Nil  : Env Nil
@@ -174,14 +174,14 @@ Given this, an interpreter is a function which
 translates an ``Expr`` into a concrete Idris value with respect to a
 specific environment:
 
-.. code-block:: idris
+.. code-block::
 
     interp : Env G -> Expr G t -> interpTy t
 
 The complete interpreter is defined as follows, for reference. For
 each constructor, we translate it into the corresponding Idris value:
 
-.. code-block:: idris
+.. code-block::
 
     interp env (Var i)     = lookup i env
     interp env (Val x)     = x
@@ -194,14 +194,14 @@ each constructor, we translate it into the corresponding Idris value:
 Let us look at each case in turn.  To translate a variable, we simply look it
 up in the environment:
 
-.. code-block:: idris
+.. code-block::
 
     interp env (Var i) = lookup i env
 
 To translate a value, we just return the concrete representation of the
 value:
 
-.. code-block:: idris
+.. code-block::
 
     interp env (Val x) = x
 
@@ -210,7 +210,7 @@ which interprets the scope of the lambda with a new value in the
 environment. So, a function in the object language is translated to an
 Idris function:
 
-.. code-block:: idris
+.. code-block::
 
     interp env (Lam sc) = \x => interp (x :: env) sc
 
@@ -218,7 +218,7 @@ For an application, we interpret the function and its argument and apply
 it directly. We know that interpreting ``f`` must produce a function,
 because of its type:
 
-.. code-block:: idris
+.. code-block::
 
     interp env (App f s) = interp env f (interp env s)
 
@@ -227,7 +227,7 @@ equivalent Idris constructs. For operators, we apply the function to
 its operands directly, and for ``If``, we apply the Idris
 ``if...then...else`` construct directly.
 
-.. code-block:: idris
+.. code-block::
 
     interp env (Op op x y) = op (interp env x) (interp env y)
     interp env (If x t e)  = if interp env x then interp env t
@@ -239,7 +239,7 @@ Testing
 We can make some simple test functions. Firstly, adding two inputs
 ``\x. \y. y + x`` is written as follows:
 
-.. code-block:: idris
+.. code-block::
 
     add : Expr G (TyFun TyInt (TyFun TyInt TyInt))
     add = Lam (Lam (Op (+) (Var Stop) (Var (Pop Stop))))
@@ -248,7 +248,7 @@ More interestingly, a factorial function ``fact``
 (e.g. ``\x. if (x == 0) then 1 else (fact (x-1) * x)``),
 can be written as:
 
-.. code-block:: idris
+.. code-block::
 
     fact : Expr G (TyFun TyInt TyInt)
     fact = Lam (If (Op (==) (Var Stop) (Val 0))
@@ -262,7 +262,7 @@ Running
 To finish, we write a ``main`` program which interprets the factorial
 function on user input:
 
-.. code-block:: idris
+.. code-block::
 
     main : IO ()
     main = do putStr "Enter a number: "
@@ -285,7 +285,7 @@ Aside: ``cast``
 The prelude defines a type class ``Cast`` which allows conversion
 between types:
 
-.. code-block:: idris
+.. code-block::
 
     class Cast from to where
         cast : from -> to

@@ -36,7 +36,7 @@ number of guesses available, and a number of letters still to guess), or
 non-running games (i.e. games which have not been started, or games
 which have been won or lost).
 
-.. code-block:: idris
+.. code-block::
 
     data GState = Running Nat Nat | NotRunning
 
@@ -48,7 +48,7 @@ to describe the game rules.
 We will, however, parameterise a concrete game state ``Mystery`` over
 this data:
 
-.. code-block:: idris
+.. code-block::
 
     data Mystery : GState -> Type
 
@@ -102,7 +102,7 @@ Get
 We can make these rules precise by declaring them more formally in an
 effect signature:
 
-.. code-block:: idris
+.. code-block::
 
     data MysteryRules : Effect where
          Guess : (x : Char) ->
@@ -128,7 +128,7 @@ Nevertheless, we can still create an ``EFFECT`` from this, and use it in
 an ``Eff`` program. Implementing a ``Handler`` for ``MysteryRules`` will
 then allow us to play the game.
 
-.. code-block:: idris
+.. code-block::
 
     MYSTERY : GState -> EFFECT
     MYSTERY h = MkEff (Mystery h) MysteryRules
@@ -139,7 +139,7 @@ Step 3: Implement Rules
 To *implement* the rules, we begin by giving a concrete definition of
 game state:
 
-.. code-block:: idris
+.. code-block::
 
     data Mystery : GState -> Type where
          Init     : Mystery NotRunning
@@ -164,7 +164,7 @@ To initialise the state, we implement the following functions:
 (ignoring spaces) and ``initState`` which sets up an initial state
 considered valid as a postcondition for ``NewWord``.
 
-.. code-block:: idris
+.. code-block::
 
     letters : String -> List Char
     initState : (x : String) -> Mystery (Running 6 (length (letters x)))
@@ -173,7 +173,7 @@ When checking if a guess is in the vector of missing letters, it is
 convenient to return a *proof* that the guess is in the vector, using
 ``isElem`` below, rather than merely a ``Bool``:
 
-.. code-block:: idris
+.. code-block::
 
     data IsElem : a -> Vect n a -> Type where
          First : IsElem x (x :: xs)
@@ -184,7 +184,7 @@ convenient to return a *proof* that the guess is in the vector, using
 The reason for returning a proof is that we can use it to remove an
 element from the correct position in a vector:
 
-.. code-block:: idris
+.. code-block::
 
     shrink : (xs : Vect (S n) a) -> IsElem x xs -> Vect n a
 
@@ -192,7 +192,7 @@ We leave the definitions of ``letters``, ``init``, ``isElem`` and
 ``shrink`` as exercises. Having implemented these, the ``Handler``
 implementation for ``MysteryRules`` is surprisingly straightforward:
 
-.. code-block:: idris
+.. code-block::
 
     instance Handler MysteryRules m where
         handle (MkG w g got []) Won k = k () (GameWon w)
@@ -220,7 +220,7 @@ Having described the rules, and implemented state transitions which
 follow those rules as an effect handler, we can now write an interface
 for the game which uses the ``MYSTERY`` effect:
 
-.. code-block:: idris
+.. code-block::
 
     game : Eff () [MYSTERY (Running (S g) w), STDIO]
                   [MYSTERY NotRunning, STDIO]
@@ -240,7 +240,7 @@ Finally, we need to initialise the game by picking a word at random from
 a list of candidates, setting it as the target using ``NewWord``, then
 running ``game``:
 
-.. code-block:: idris
+.. code-block::
 
     runGame : Eff () [MYSTERY NotRunning, RND, SYSTEM, STDIO]
     runGame = do srand (cast !time)
@@ -254,7 +254,7 @@ Appendix :ref:`sect-appendix`) to initialise the random number
 generator, then pick a random ``Fin`` to index into a list of
 ``words``. For example, we could initialise a word list as follows:
 
-.. code-block:: idris
+.. code-block::
 
     words : ?wtype
     words = with Vect ["idris","agda","haskell","miranda",
@@ -272,7 +272,7 @@ generator, then pick a random ``Fin`` to index into a list of
 A possible complete implementation of ``game`` is
 presented below:
 
-.. code-block:: idris
+.. code-block::
 
     game : Eff () [MYSTERY (Running (S g) w), STDIO]
                   [MYSTERY NotRunning, STDIO]

@@ -68,14 +68,14 @@ The ``:addclause n f`` command (abbreviated ``:ac n f``) creates a
 template definition for the function named ``f`` declared on line
 ``n``.  For example, if the code beginning on line 94 contains:
 
-.. code-block:: idris
+.. code-block::
 
     vzipWith : (a -> b -> c) ->
                Vect n a -> Vect n b -> Vect n c
 
 then ``:ac 94 vzipWith`` will give:
 
-.. code-block:: idris
+.. code-block::
 
     vzipWith f xs ys = ?vzipWith_rhs
 
@@ -83,7 +83,7 @@ The names are chosen according to hints which may be given by a
 programmer, and then made unique by the machine by adding a digit if
 necessary. Hints can be given as follows:
 
-.. code-block:: idris
+.. code-block::
 
     %name Vect xs, ys, zs, ws
 
@@ -98,7 +98,7 @@ pattern variable ``x`` on line ``n`` into the various pattern forms it
 may take, removing any cases which are impossible due to unification
 errors. For example, if the code beginning on line 94 is:
 
-.. code-block:: idris
+.. code-block::
 
     vzipWith : (a -> b -> c) ->
                Vect n a -> Vect n b -> Vect n c
@@ -106,7 +106,7 @@ errors. For example, if the code beginning on line 94 is:
 
 then ``:cs 96 xs`` will give:
 
-.. code-block:: idris
+.. code-block::
 
     vzipWith f [] ys = ?vzipWith_rhs_1
     vzipWith f (x :: xs) ys = ?vzipWith_rhs_2
@@ -116,7 +116,7 @@ possible cases ``[]`` and ``x :: xs``. Again, the names are chosen
 according to the same heuristic. If we update the file (using
 ``:cs!``) then case split on ``ys`` on the same line, we get:
 
-.. code-block:: idris
+.. code-block::
 
     vzipWith f [] [] = ?vzipWith_rhs_3
 
@@ -131,7 +131,7 @@ The ``:addmissing n f`` command, abbreviated ``:am n f``, adds the
 clauses which are required to make the function ``f`` on line ``n``
 cover all inputs. For example, if the code beginning on line 94 is
 
-.. code-block:: idris
+.. code-block::
 
     vzipWith : (a -> b -> c) ->
                Vect n a -> Vect n b -> Vect n c
@@ -139,7 +139,7 @@ cover all inputs. For example, if the code beginning on line 94 is
 
 then ``:am 96 vzipWith`` gives:
 
-.. code-block:: idris
+.. code-block::
 
     vzipWith f (x :: xs) (y :: ys) = ?vzipWith_rhs_2
 
@@ -157,7 +157,7 @@ the required family. Optionally, it can take a list of *hints*, which
 are functions it can try applying to solve the hole. For
 example, if the code beginning on line 94 is:
 
-.. code-block:: idris
+.. code-block::
 
     vzipWith : (a -> b -> c) ->
                Vect n a -> Vect n b -> Vect n c
@@ -166,7 +166,7 @@ example, if the code beginning on line 94 is:
 
 then ``:ps 96 vzipWith_rhs_1`` will give
 
-.. code-block:: idris
+.. code-block::
 
     []
 
@@ -175,7 +175,7 @@ which the empty vector is the only possibility. Similarly, and perhaps
 surprisingly, there is only one possibility if we try to solve ``:ps
 97 vzipWith_rhs_2``:
 
-.. code-block:: idris
+.. code-block::
 
     f x y :: (vzipWith f xs ys)
 
@@ -192,13 +192,13 @@ The ``:makewith n f`` command, abbreviated ``:mw n f``, adds a
 ``with`` to a pattern clause. For example, recall ``parity``. If line
 10 is:
 
-.. code-block:: idris
+.. code-block::
 
     parity (S k) = ?parity_rhs
 
 then ``:mw 10 parity`` will give:
 
-.. code-block:: idris
+.. code-block::
 
     parity (S k) with (_)
       parity (S k) | with_pat = ?parity_rhs
@@ -207,7 +207,7 @@ If we then fill in the placeholder ``_`` with ``parity k`` and case
 split on ``with_pat`` using ``:cs 11 with_pat`` we get the following
 patterns:
 
-.. code-block:: idris
+.. code-block::
 
       parity (S (plus n n)) | even = ?parity_rhs_1
       parity (S (S (plus n n))) | odd = ?parity_rhs_2

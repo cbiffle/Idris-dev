@@ -12,7 +12,7 @@ types, classes and functions. For example, the listing below gives a
 module which defines a binary tree type ``BTree`` (in a file
 ``Btree.idr``):
 
-.. code-block:: idris
+.. code-block::
 
     module Btree
 
@@ -36,7 +36,7 @@ module which defines a binary tree type ``BTree`` (in a file
 Then, this gives a main program (in a file
 ``bmain.idr``) which uses the ``Btree`` module to sort a list:
 
-.. code-block:: idris
+.. code-block::
 
     module Main
 
@@ -102,7 +102,7 @@ and classes to be marked as: ``public``, ``abstract`` or ``private``:
 For our ``Btree`` module, it makes sense for the tree data type and the
 functions to be exported as ``abstract``, as we see below:
 
-.. code-block:: idris
+.. code-block::
 
     module Btree
 
@@ -128,7 +128,7 @@ functions to be exported as ``abstract``, as we see below:
 Finally, the default export mode can be changed with the ``%access``
 directive, for example:
 
-.. code-block:: idris
+.. code-block::
 
     module Btree
 
@@ -156,7 +156,7 @@ In this case, any function with no access modifier will be exported as
 Additionally, a module can re-export a module it has imported, by using
 the ``public`` modifier on an ``import``. For example:
 
-.. code-block:: idris
+.. code-block::
 
     module A
 
@@ -176,7 +176,7 @@ Defining a module also defines a namespace implicitly. However,
 namespaces can also be given *explicitly*. This is most useful if you
 wish to overload names within the same module:
 
-.. code-block:: idris
+.. code-block::
 
     module Foo
 
@@ -205,7 +205,7 @@ Parameterised blocks
 Groups of functions can be parameterised over a number of arguments
 using a ``parameters`` declaration, for example:
 
-.. code-block:: idris
+.. code-block::
 
     parameters (x : Nat, y : Nat)
       addAll : Nat -> Nat
@@ -224,7 +224,7 @@ Parameters blocks can be nested, and can also include data declarations,
 in which case the parameters are added explicitly to all type and data
 constructors. They may also be dependent types with implicit arguments:
 
-.. code-block:: idris
+.. code-block::
 
     parameters (y : Nat, xs : Vect x a)
       data Vects : Type -> Type where

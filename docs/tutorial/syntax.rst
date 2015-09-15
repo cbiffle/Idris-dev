@@ -17,7 +17,7 @@ We have seen ``if...then...else`` expressions, but these are not built
 in. Instead, we can define a function in the prelude as follows (we
 have already seen this function in Section :ref:`sect-lazy`):
 
-.. code-block:: idris
+.. code-block::
 
     ifThenElse : (x:Bool) -> Lazy a -> Lazy a -> a;
     ifThenElse True  t e = t;
@@ -25,7 +25,7 @@ have already seen this function in Section :ref:`sect-lazy`):
 
 and then extend the core syntax with a ``syntax`` declaration:
 
-.. code-block:: idris
+.. code-block::
 
     syntax if [test] then [t] else [e] = ifThenElse test t e;
 
@@ -56,7 +56,7 @@ expressions may be used (that is, variables, constants, or bracketed
 expressions). Rules can use previously defined rules, but may not be
 recursive. The following syntax extensions would therefore be valid:
 
-.. code-block:: idris
+.. code-block::
 
     syntax [var] ":=" [val]                = Assign var val;
     syntax [test] "?" [t] ":" [e]          = if test then t else e;
@@ -70,7 +70,7 @@ being marked as ``pattern`` or ``term`` syntax rules. For example, we
 might define an interval as follows, with a static check that the lower
 bound is below the upper bound using ``so``:
 
-.. code-block:: idris
+.. code-block::
 
     data Interval : Type where
        MkInterval : (lower : Float) -> (upper : Float) ->
@@ -79,7 +79,7 @@ bound is below the upper bound using ``so``:
 We can define a syntax which, in patterns, always matches ``oh`` for
 the proof argument, and in terms requires a proof term to be provided:
 
-.. code-block:: idris
+.. code-block::
 
     pattern syntax "[" [x] "..." [y] "]" = MkInterval x y oh
     term    syntax "[" [x] "..." [y] "]" = MkInterval x y ?bounds_lemma
@@ -90,7 +90,7 @@ In terms, the syntax ``[x...y]`` will generate a proof obligation
 Finally, syntax rules may be used to introduce alternative binding
 forms. For example, a ``for`` loop binds a variable on each iteration:
 
-.. code-block:: idris
+.. code-block::
 
     syntax for {x} in [xs] ":" [body] = forLoop xs (\x => body)
 
@@ -118,7 +118,7 @@ Unfortunately, the form of object language programs makes it rather
 hard to program this way in practice. Recall the factorial program in
 ``Expr`` for example:
 
-.. code-block:: idris
+.. code-block::
 
     fact : Expr G (TyFun TyInt TyInt)
     fact = Lam (If (Op (==) (Var Stop) (Val 0))
@@ -129,7 +129,7 @@ Since this is a particularly useful pattern, Idris provides syntax
 overloading [1]_ to make it easier to program in such object
 languages:
 
-.. code-block:: idris
+.. code-block::
 
     mkLam : TTName -> Expr (t::g) t' -> Expr g (TyFun t t')
     mkLam _ body = Lam body
@@ -150,7 +150,7 @@ argument, which is the name that the user chose for the variable. It
 is also possible to overload ``let`` and dependent function syntax
 (``pi``) in this way. We can now write ``fact`` as follows:
 
-.. code-block:: idris
+.. code-block::
 
     fact : Expr G (TyFun TyInt TyInt)
     fact = expr (\x => If (Op (==) x (Val 0))
@@ -160,7 +160,7 @@ In this new version, ``expr`` declares that the next expression will
 be overloaded. We can take this further, using idiom brackets, by
 declaring:
 
-.. code-block:: idris
+.. code-block::
 
     (<$>) : (f : Lazy (Expr G (TyFun a t))) -> Expr G a -> Expr G t
     (<$>) f a = App f a
@@ -173,7 +173,7 @@ Note that there is no need for these to be part of an instance of
 the names ``<*>`` and ``pure``, and ad-hoc type-directed overloading
 is allowed. We can now say:
 
-.. code-block:: idris
+.. code-block::
 
     fact : Expr G (TyFun TyInt TyInt)
     fact = expr (\x => If (Op (==) x (Val 0))
@@ -182,7 +182,7 @@ is allowed. We can now say:
 With some more ad-hoc overloading and type class instances, and a new
 syntax rule, we can even go as far as:
 
-.. code-block:: idris
+.. code-block::
 
     syntax "IF" [x] "THEN" [t] "ELSE" [e] = If x t e
 

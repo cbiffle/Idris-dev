@@ -10,7 +10,7 @@ different (in that they do not have the same normal form), but
 nevertheless provably equal. For example, recall the ``parity``
 function:
 
-.. code-block:: idris
+.. code-block::
 
     data Parity : Nat -> Type where
        Even : Parity (n + n)
@@ -18,7 +18,7 @@ function:
 
 We’d like to implement this as follows:
 
-.. code-block:: idris
+.. code-block::
 
     parity : (n:Nat) -> Parity n
     parity Z     = Even {n=Z}
@@ -71,7 +71,7 @@ Provisional definitions are written in the same way as ordinary
 definitions, except that they introduce the right hand side with a
 ``?=`` rather than ``=``. We define ``parity`` as follows:
 
-.. code-block:: idris
+.. code-block::
 
     parity : (n:Nat) -> Parity n
     parity Z = Even {n=Z}
@@ -85,7 +85,7 @@ will insert a hole standing for a theorem which will correct the
 type error. Idris tells us we have two proof obligations, with names
 generated from the module and function names:
 
-.. code-block:: idris
+.. code-block::
 
     *views> :m
     Global holes:
@@ -93,7 +93,7 @@ generated from the module and function names:
 
 The first of these has the following type:
 
-.. code-block:: idris
+.. code-block::
 
     *views> :p views.parity_lemma_1
 
@@ -108,14 +108,14 @@ of the provisional definition. Our goal is to rewrite the type so that
 we can use this value. We can achieve this using the following theorem
 from the prelude:
 
-.. code-block:: idris
+.. code-block::
 
     plusSuccRightSucc : (left : Nat) -> (right : Nat) ->
       S (left + right) = left + (S right)
 
 We need to use ``compute`` again to unfold the definition of ``plus``:
 
-.. code-block:: idris
+.. code-block::
 
     -views.parity_lemma_1> compute
 
@@ -125,7 +125,7 @@ We need to use ``compute`` again to unfold the definition of ``plus``:
 
 After applying ``intros`` we have:
 
-.. code-block:: idris
+.. code-block::
 
     -views.parity_lemma_1> intros
 
@@ -137,7 +137,7 @@ After applying ``intros`` we have:
 Then we apply the ``plusSuccRightSucc`` rewrite rule, symmetrically, to
 ``j`` and ``j``, giving:
 
-.. code-block:: idris
+.. code-block::
 
     -views.parity_lemma_1> rewrite sym (plusSuccRightSucc j j)
 
@@ -149,7 +149,7 @@ Then we apply the ``plusSuccRightSucc`` rewrite rule, symmetrically, to
 ``sym`` is a function, defined in the library, which reverses the order
 of the rewrite:
 
-.. code-block:: idris
+.. code-block::
 
     sym : l = r -> r = l
     sym Refl = Refl
@@ -162,7 +162,7 @@ We can now test the ``natToBin`` function from Section :ref:`sect-nattobin`
 at the prompt. The number 42 is 101010 in binary. The binary digits are
 reversed:
 
-.. code-block:: idris
+.. code-block::
 
     *views> show (natToBin 42)
     "[False, True, False, True, False, True]" : String
@@ -180,7 +180,7 @@ better not waste your time proving something!
 Therefore, Idris provides a built-in coercion function, which allows
 you to use a value of the incorrect types:
 
-.. code-block:: idris
+.. code-block::
 
     believe_me : a -> b
 
@@ -189,7 +189,7 @@ prototyping, and can also be appropriate when asserting properties of
 external code (perhaps in an external C library). The “proof” of
 ``views.parity_lemma_1`` using this is:
 
-.. code-block:: idris
+.. code-block::
 
     views.parity_lemma_2 = proof {
         intro;
@@ -210,7 +210,7 @@ their ``Nat`` equivalent. This is a common pattern, linking a
 representation (in this case ``Binary``) with a meaning (in this case
 ``Nat``):
 
-.. code-block:: idris
+.. code-block::
 
     data Binary : Nat -> Type where
        bEnd : Binary Z
@@ -228,7 +228,7 @@ Now a function which converts a Nat to binary will state, in the type,
 that the resulting binary number is a faithful representation of the
 original Nat:
 
-.. code-block:: idris
+.. code-block::
 
     natToBin : (n:Nat) -> Binary n
 
@@ -236,7 +236,7 @@ The ``Parity`` view makes the definition fairly simple — halving the
 number is effectively a right shift after all — although we need to use
 a provisional definition in the odd case:
 
-.. code-block:: idris
+.. code-block::
 
     natToBin : (n:Nat) -> Binary n
     natToBin Z = bEnd
@@ -247,7 +247,7 @@ a provisional definition in the odd case:
 The problem with the odd case is the same as in the definition of
 ``parity``, and the proof proceeds in the same way:
 
-.. code-block:: idris
+.. code-block::
 
     natToBin_lemma_1 = proof {
         intro;
@@ -259,7 +259,7 @@ The problem with the odd case is the same as in the definition of
 To finish, we’ll implement a main program which reads an integer from
 the user and outputs it in binary.
 
-.. code-block:: idris
+.. code-block::
 
     main : IO ()
     main = do putStr "Enter a number: "
@@ -269,7 +269,7 @@ the user and outputs it in binary.
 For this to work, of course, we need a ``Show`` instance for
 ``Binary n``:
 
-.. code-block:: idris
+.. code-block::
 
     instance Show (Binary n) where
         show (bO x) = show x ++ "0"

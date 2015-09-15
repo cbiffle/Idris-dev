@@ -14,7 +14,7 @@ left to right). This would perform something like the following:
 We can describe binary trees with the following data type ``BTree``
 and ``testTree`` to represent the example input above:
 
-.. code-block:: idris
+.. code-block::
 
     data BTree a = Leaf
                  | Node (BTree a) a (BTree a)
@@ -29,7 +29,7 @@ and ``testTree`` to represent the example input above:
 Then our function to implement tagging, beginning to tag with a
 specific value ``i``, has the following type:
 
-.. code-block:: idris
+.. code-block::
 
     treeTag : (i : Int) -> BTree a -> BTree (Int, a)
 
@@ -40,7 +40,7 @@ Naïvely, we can implement ``treeTag`` by implementing a helper
 function which propagates a counter, returning the result of the count
 for each subtree:
 
-.. code-block:: idris
+.. code-block::
 
     treeTagAux : (i : Int) -> BTree a -> (Int, BTree (Int, a))
     treeTagAux i Leaf = (i, Leaf)
@@ -55,7 +55,7 @@ for each subtree:
 
 This gives the expected result when run at the REPL prompt:
 
-.. code-block:: idris
+.. code-block::
 
     *TreeTag> treeTag 1 testTree
     Node (Node Leaf (1, "Jim") Leaf)
@@ -81,7 +81,7 @@ Idris provides a library, ``Effects`` [3]_, which captures this
 pattern and many others involving effectful computation [1]_. An
 effectful program ``f`` has a type of the following form:
 
-.. code-block:: idris
+.. code-block::
 
     f : (x1 : a1) -> (x2 : a2) -> ... -> Eff t effs
 
@@ -90,7 +90,7 @@ That is, the return type gives the effects that ``f`` supports
 returns ``t``. So, our ``treeTagAux`` helper could be written with the
 following type:
 
-.. code-block:: idris
+.. code-block::
 
     treeTagAux : BTree a -> Eff (BTree (Int, a)) [STATE Int]
 
@@ -99,7 +99,7 @@ list of available effects includes ``STATE Int``. ``STATE`` is
 declared as follows in the module ``Effect.State`` (that is, we must
 ``import Effect.State`` to be able to use it):
 
-.. code-block:: idris
+.. code-block::
 
     STATE : Type -> EFFECT
 
@@ -108,7 +108,7 @@ effects in all capitals). The ``treeTagAux`` function is an effectful
 program which builds a new tree tagged with ``Ints``, and is
 implemented as follows:
 
-.. code-block:: idris
+.. code-block::
 
     treeTagAux Leaf = pure Leaf
     treeTagAux (Node l x r)
@@ -139,7 +139,7 @@ The ``get`` and ``put`` functions read and write a state ``t``,
 assuming that the ``STATE t`` effect is available. They have the
 following types, polymorphic in the state ``t`` they manage:
 
-.. code-block:: idris
+.. code-block::
 
     get :      Eff t [STATE t]
     put : t -> Eff () [STATE t]
@@ -156,7 +156,7 @@ runs an effectful program in the identity context, we can write the
 ``treeTag`` function as follows, using ``put`` to initialise the
 state:
 
-.. code-block:: idris
+.. code-block::
 
     treeTag : (i : Int) -> BTree a -> BTree (Int, a)
     treeTag i x = runPure (do put i
@@ -166,7 +166,7 @@ We could also run the program in an impure context such as ``IO``,
 without changing the definition of ``treeTagAux``, by using ``run``
 instead of ``runPure``:
 
-.. code-block:: idris
+.. code-block::
 
     treeTagAux : BTree a -> Eff (BTree (Int, a)) [STATE Int]
     ...
@@ -179,7 +179,7 @@ Note that the definition of ``treeTagAux`` is exactly as before. For
 reference, this complete program (including a ``main`` to run it) is
 shown in Listing [introprog].
 
-.. code-block:: idris
+.. code-block::
 
     module Main
 
@@ -225,7 +225,7 @@ before an effectful program can be run. For example, in the case of
 The types of ``runPure`` and ``run`` show this (slightly simplified
 here for illustrative purposes):
 
-.. code-block:: idris
+.. code-block::
 
     runPure : {env : Env id xs} -> Eff a xs -> a
     run : Applicative m => {env : Env m xs} -> Eff a xs -> m a
@@ -234,7 +234,7 @@ The ``env`` argument is implicit, and initialised automatically where
 possible using default values given by instances of the following type
 class:
 
-.. code-block:: idris
+.. code-block::
 
     class Default a where
         default : a
@@ -246,7 +246,7 @@ example, you may want a ``STATE`` type for which there is no
 ``Default`` instance) the resource environment can be given explicitly
 using one of the following functions:
 
-.. code-block:: idris
+.. code-block::
 
     runPureInit : Env id xs -> Eff a xs -> a
     runInit : Applicative m => Env m xs -> Eff a xs -> m a
@@ -255,7 +255,7 @@ To be well-typed, the environment must contain resources corresponding
 exactly to the effects in ``xs``. For example, we could also have
 implemented ``treeTag`` by initialising the state as follows:
 
-.. code-block:: idris
+.. code-block::
 
     treeTag : (i : Int) -> BTree a -> BTree (Int, a)
     treeTag i x = runPureInit [i] (treeTagAux x)
@@ -270,7 +270,7 @@ tagging example such that it additionally counts the number of leaves
 in the tree? One possibility would be to change the state so that it
 captured both of these values, e.g.:
 
-.. code-block:: idris
+.. code-block::
 
     treeTagAux : BTree a -> Eff (BTree (Int, a)) [STATE (Int, Int)]
 
@@ -285,7 +285,7 @@ that they can be referred to explicitly by a particular name. This
 allows multiple effects of the same type to be included. We can count
 leaves and update the tag separately, by labelling them as follows:
 
-.. code-block:: idris
+.. code-block::
 
     treeTagAux : BTree a ->  Eff (BTree (Int, a))
                                    ['Tag ::: STATE Int,
@@ -302,7 +302,7 @@ When an effect is labelled, its operations are also labelled using the
 mean when using ``get`` and ``put``. The tree tagging program which
 also counts leaves can be written as follows:
 
-.. code-block:: idris
+.. code-block::
 
     treeTagAux Leaf = do
         'Leaves :- update (+1)
@@ -317,7 +317,7 @@ also counts leaves can be written as follows:
 The ``update`` function here is a combination of ``get`` and ``put``,
 applying a function to the current state.
 
-.. code-block:: idris
+.. code-block::
 
     update : (x -> x) -> Eff () [STATE x]
 
@@ -326,7 +326,7 @@ number of leaves, and the new tree. Resources for labelled effects are
 initialised using the ``:=`` operator (reminiscent of assignment in an
 imperative language):
 
-.. code-block:: idris
+.. code-block::
 
     treeTag : (i : Int) -> BTree a -> (Int, BTree (Int, a))
     treeTag i x = runPureInit ['Tag := i, 'Leaves := 0]
@@ -345,7 +345,7 @@ To summarise, we have:
 Or, more formally with their types (slightly simplified to account
 only for the situation where available effects are not updated):
 
-.. code-block:: idris
+.. code-block::
 
     (:::) : lbl -> EFFECT -> EFFECT
     (:-)  : (l : lbl) -> Eff a [x] -> Eff a [l ::: x]
@@ -363,7 +363,7 @@ verbose, particularly in cases where the value bound is used once,
 immediately. The following program returns the length of the
 ``String`` stored in the state, for example:
 
-.. code-block:: idris
+.. code-block::
 
     stateLength : Eff Nat [STATE String]
     stateLength = do x <- get
@@ -373,7 +373,7 @@ This seems unnecessarily verbose, and it would be nice to program in a
 more direct style in these cases. provides ``!``-notation to help with
 this. The above program can be written instead as:
 
-.. code-block:: idris
+.. code-block::
 
     stateLength : Eff Nat [STATE String]
     stateLength = pure (length !get)
@@ -382,7 +382,7 @@ The notation ``!expr`` means that the expression ``expr`` should be
 evaluated and then implicitly bound. Conceptually, we can think of
 ``!`` as being a prefix function with the following type:
 
-.. code-block:: idris
+.. code-block::
 
     (!) : Eff a xs -> a
 
@@ -396,13 +396,13 @@ expressions are effectful.
 
 For example, the expression:
 
-.. code-block:: idris
+.. code-block::
 
     let y = 42 in f !(g !(print y) !x)
 
 is lifted to:
 
-.. code-block:: idris
+.. code-block::
 
     let y = 42 in do y' <- print y
                      x' <- x
@@ -415,7 +415,7 @@ The Type ``Eff``
 Underneath, ``Eff`` is an overloaded function which translates to an
 underlying type ``EffM``:
 
-.. code-block:: idris
+.. code-block::
 
     EffM : (m : Type -> Type) -> (t : Type)
             -> (List EFFECT)
@@ -446,7 +446,7 @@ While powerful, this can make uses of the ``EffM`` type hard to read.
 Therefore the library provides an overloaded function ``Eff``
 There are the following three versions:
 
-.. code-block:: idris
+.. code-block::
 
     SimpleEff.Eff : (t : Type) -> (input_effs : List EFFECT) -> Type
     TransEff.Eff  : (t : Type) -> (input_effs : List EFFECT) ->
@@ -457,7 +457,7 @@ There are the following three versions:
 So far, we have used only the first version, ``SimpleEff.Eff``, which
 is defined as follows:
 
-.. code-block:: idris
+.. code-block::
 
     Eff : (x : Type) -> (es : List EFFECT) -> Type
     Eff x es = {m : Type -> Type} -> EffM m x es (\v => es)
@@ -467,20 +467,20 @@ the ``STATE`` example we have seen so far, and for many useful
 side-effecting programs. We could also have written ``treeTagAux``
 with the expanded type:
 
-.. code-block:: idris
+.. code-block::
 
     treeTagAux : BTree a ->
                  EffM m (BTree (Int, a)) [STATE Int] (\x => [STATE Int])
 
 Later, we will see programs which update effects:
 
-.. code-block:: idris
+.. code-block::
 
     Eff a xs xs'
 
 which is expanded to
 
-.. code-block:: idris
+.. code-block::
 
     EffM m a xs (\_ => xs')
 
@@ -488,19 +488,19 @@ i.e. the set of effects is updated to ``xs’`` (think of a transition
 in a state machine). There is, for example, a version of ``put`` which
 updates the type of the state:
 
-.. code-block:: idris
+.. code-block::
 
     putM : y -> Eff () [STATE x] [STATE y]
 
 Also, we have:
 
-.. code-block:: idris
+.. code-block::
 
     Eff t xs (\res => xs')
 
 which is expanded to
 
-.. code-block:: idris
+.. code-block::
 
     EffM m t xs (\res => xs')
 

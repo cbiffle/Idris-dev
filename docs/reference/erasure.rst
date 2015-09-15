@@ -14,7 +14,7 @@ Motivation
 Traditional dependently typed languages (Agda, Coq) are good at
 erasing *proofs* (either via irrelevance or an extra universe).
 
-.. code-block:: idris
+::
 
     half : (n : Nat) -> Even n -> Nat
     half Z EZ = Z
@@ -31,7 +31,7 @@ traditional approaches stop being useful, mainly for reasons described
 in the `original proposal
 <https://github.com/idris-lang/Idris-dev/wiki/Egg-%232%3A-Erasure-annotations>`__.
 
-.. code-block:: idris
+::
 
     uninterleave : {n : Nat} -> Vect (n * 2) a -> (Vect n a, Vect n a)
     uninterleave [] = ([] , [])
@@ -58,9 +58,7 @@ Binary numbers
 - O(n) instead of O(log n)
 
 Consider the following ``Nat``-indexed type family representing binary
-numbers:
-
-.. code-block:: idris
+numbers::
 
     data Bin : Nat -> Type where
       N : Bin 0
@@ -111,9 +109,7 @@ U-views of lists
 
 -  O(n^2) instead of O(n)
 
-Consider the type of U-views of lists:
-
-.. code-block:: idris
+Consider the type of U-views of lists::
 
     data U : List a -> Type where
       nil : U []
@@ -121,9 +117,7 @@ Consider the type of U-views of lists:
       two : {xs : List a} -> (x : a) -> (u : U xs) -> (y : a) -> U (x :: xs ++ [y])
 
 For better intuition, the shape of the U-view of
-``[x0,x1,x2,z,y2,y1,y0]`` looks like this:
-
-.. code-block:: none
+``[x0,x1,x2,z,y2,y1,y0]`` looks like this::
 
       x0   y0    (two)
       x1   y1    (two)
@@ -189,9 +183,7 @@ Changes to the language
 =======================
 
 You can use dots to mark fields that are not intended to be used at
-runtime.
-
-.. code-block:: idris
+runtime::
 
     data Bin : Nat -> Type where
       N : Bin 0
@@ -202,9 +194,7 @@ If these fields are found to be used at runtime, the dots will trigger
 a warning (with ``--warnreach``).
 
 Note that free (unbound) implicits are dotted by default so, for
-example, the constructor ``O`` can be defined as:
-
-.. code-block:: idris
+example, the constructor ``O`` can be defined as::
 
       O : Bin n -> Bin (0 + 2*n)
 
@@ -213,9 +203,7 @@ and this is actually the preferred form.
 If you have a free implicit which is meant to be used at runtime, you
 have to change it into an (undotted) ``{bound : implicit}``.
 
-You can also put dots in types of functions to get more guarantees.
-
-.. code-block:: idris
+You can also put dots in types of functions to get more guarantees::
 
     half : (n : Nat) -> .(pf : Even n) -> Nat
 
@@ -365,16 +353,12 @@ The compiler refuses to recognise this thing as erased
 ------------------------------------------------------
 
 You can force anything to be erased by wrapping it in the ``Erased``
-monad. While this program triggers usage warnings,
-
-.. code-block:: idris
+monad. While this program triggers usage warnings::
 
     f : (g : Nat -> Nat) -> .(x : Nat) -> Nat
     f g x = g x  -- WARNING: g uses x
 
-the following program does not:
-
-.. code-block:: idris
+the following program does not::
 
     f : (g : Erased Nat -> Nat) -> .(x : Nat) -> Nat
     f g x = g (Erase x)  -- OK
@@ -385,9 +369,7 @@ How to read and resolve erasure warnings
 Example 1
 ---------
 
-Consider the following program:
-
-.. code-block:: idris
+Consider the following program::
 
     vlen : Vect n a -> Nat
     vlen {n = n} xs = n
@@ -399,18 +381,14 @@ Consider the following program:
     main : IO ()
     main = print . sumLengths $ [[0,1],[2,3]]
 
-When you compile it using ``--warnreach``, there is one warning:
-
-.. code-block:: idris
+When you compile it using ``--warnreach``, there is one warning::
 
     Main.sumLengths: inaccessible arguments reachable:
       n (no more information available)
 
 The warning does not contain much detail at this point so we can try
 compiling with ``--dumpcases cases.txt`` and look up the compiled
-definition in ``cases.txt``:
-
-.. code-block:: idris
+definition in ``cases.txt``::
 
     Main.sumLengths {e0} {e1} {e2} =
       case {e2} of
@@ -423,15 +401,11 @@ variable ``n``, compiled as ``{e0}``. Since ``n`` is a free implicit, it
 is automatically considered dotted and this triggers the warning.
 
 A solution would be either making the argument ``n`` a bound implicit
-parameter to indicate that we wish to keep it at runtime,
-
-.. code-block:: idris
+parameter to indicate that we wish to keep it at runtime::
 
     sumLengths : {n : Nat} -> List (Vect n a) -> Nat
 
-or fixing ``vlen`` to not use the index:
-
-.. code-block:: idris
+or fixing ``vlen`` to not use the index::
 
     vlen : Vect n a -> Nat
     vlen [] = Z
@@ -443,9 +417,7 @@ Example 2
 ---------
 
 Consider the following program manipulating value-indexed binary
-numbers.
-
-.. code-block:: idris
+numbers::
 
     data Bin : Nat -> Type where
         N : Bin Z
@@ -468,7 +440,7 @@ implicit, therefore it is considered dotted.
 Inspecting it then produces the following warnings when compiling with
 ``--warnreach``:
 
-.. code-block:: idris
+.. code-block:: none
 
     Main.I: inaccessible arguments reachable:
       n from Main.toN arg# 1
@@ -487,9 +459,7 @@ says, we project the dotted field from ``b``.
 
 Again, one solution is to fix the function ``toN`` to calculate its
 result honestly; the other one is to accept that we carry a ``Nat``
-with every constructor of ``Bin`` and make it a bound implicit:
-
-.. code-block:: idris
+with every constructor of ``Bin`` and make it a bound implicit::
 
         O : {n : Nat} -> Bin n -> Bin (0 + n + n)
         I : {n : Nat} -> bin n -> Bin (1 + n + n)

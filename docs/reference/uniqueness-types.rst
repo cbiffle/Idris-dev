@@ -32,7 +32,7 @@ If ``x : T`` and ``T : UniqueType``, then there is at most one reference
 to ``x`` at any time during run-time execution. For example, we can
 declare the type of unique lists as follows:
 
-.. code-block:: idris
+.. code-block::
 
     data UList : Type -> UniqueType
          Nil   : UList a
@@ -44,7 +44,7 @@ guarantee by ensuring that there is at most one reference to any value
 of a unique type in a pattern clause. For example, the following
 function definition would be valid:
 
-.. code-block:: idris
+.. code-block::
 
     umap : (a -> b) -> UList a -> UList b
     umap f [] = []
@@ -60,7 +60,7 @@ of the list.
 The following function definition would not be valid (even assuming an
 implementation of ``++``), however, since ``xs`` appears twice:
 
-.. code-block:: idris
+.. code-block::
 
     dupList : UList a -> UList a
     dupList xs = xs ++ xs
@@ -68,13 +68,13 @@ implementation of ``++``), however, since ``xs`` appears twice:
 This would result in a shared pointer to ``xs``, so the typechecker
 reports:
 
-.. code-block:: idris
+.. code-block::
 
     unique.idr:12:5:Unique name xs is used more than once
 
 If we explicitly copy, however, the typechecker is happy:
 
-.. code-block:: idris
+.. code-block::
 
     dup : UList a -> UList a
     dup [] = []
@@ -92,7 +92,7 @@ constructor builds a ``Type``, then no constructor can have a
 ``UniqueType``. For example, the following definition is invalid,
 since it would embed a unique value in a possible non-unique value:
 
-.. code-block:: idris
+.. code-block::
 
     data BadList : UniqueType -> Type
          Nil   : {a : UniqueType} -> BadList a
@@ -103,14 +103,14 @@ extent. Since ``Type`` and ``UniqueType`` are different types, we are
 limited in how much we can use polymorphic functions on unique types.
 For example, if we have function composition defined as follows:
 
-.. code-block:: idris
+.. code-block::
 
     (.) : {a, b, c : Type} -> (b -> c) -> (a -> b) -> a -> c
     (.) f g x = f (g x)
 
 And we have some functions over unique types:
 
-.. code-block:: idris
+.. code-block::
 
     foo : UList a -> UList b
     bar : UList b -> UList c
@@ -119,7 +119,7 @@ Then we cannot compose ``foo`` and ``bar`` as ``bar . foo``, because
 ``UList`` does not compute a ``Type``! Instead, we can define
 composition as follows:
 
-.. code-block:: idris
+.. code-block::
 
     (.) : {a, b, c : Type*} -> (b -> c) -> (a -> b) -> a -> c
     (.) f g x = f (g x)
@@ -136,7 +136,7 @@ It quickly becomes obvious when working with uniqueness types that
 having only one reference at a time can be painful. For example, what
 if we want to display a list before updating it?
 
-.. code-block:: idris
+.. code-block::
 
     showU : Show a => UList a -> String
     showU xs = "[" ++ showU' xs ++ "]" where
@@ -148,7 +148,7 @@ if we want to display a list before updating it?
 This is a valid definition of ``showU``, but unfortunately it consumes
 the list! So the following function would be invalid:
 
-.. code-block:: idris
+.. code-block::
 
     printAndUpdate : UList Int -> IO ()
     printAndUpdate xs = do putStrLn (showU xs)
@@ -167,7 +167,7 @@ will not be passed to any function which will update them.
 defined as follows (along with some additional rules in the
 typechecker):
 
-.. code-block:: idris
+.. code-block::
 
     data Borrowed : UniqueType -> BorrowedType where
          Read : {a : UniqueType} -> a -> Borrowed a
@@ -181,7 +181,7 @@ A value can be "lent" to another function using ``lend``. Arguments to
 value, therefore a value can be lent as many times as desired. Using
 this, we can write ``showU`` as follows:
 
-.. code-block:: idris
+.. code-block::
 
     showU : Show a => Borrowed (UList a) -> String
     showU xs = "[" ++ showU' xs ++ "]" where
@@ -206,7 +206,7 @@ function types. Once we're in a unique context, any new function which
 is constructed will be required to have unique type, which prevents
 the following sort of bad program being implemented:
 
-.. code-block:: idris
+.. code-block::
 
     foo : UList Int -> IO ()
     foo xs = do let f = \x : Int => showU xs
@@ -218,7 +218,7 @@ Since ``lend`` is implicit, in practice for functions to lend and borrow
 values merely requires the argument to be marked as ``Borrowed``. We can
 therefore write ``showU`` as follows:
 
-.. code-block:: idris
+.. code-block::
 
     showU : Show a => Borrowed (UList a) -> String
     showU xs = "[" ++ showU' xs ++ "]" where

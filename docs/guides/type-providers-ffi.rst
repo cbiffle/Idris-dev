@@ -33,7 +33,7 @@ providers themselves are simple.
 A type provider is simply an IO action that returns a value of this
 type:
 
-.. code-block:: idris
+.. code-block::
 
     data Provider a = Provide a | Error String
 
@@ -43,7 +43,7 @@ slightly more descriptive name.
 Remember though, type providers we use in our program must be IO
 actions. Let's write a simple one now:
 
-.. code-block:: idris
+.. code-block::
 
     module Provider
     -- Asks nicely for the user to supply the size of C's size_t type on this
@@ -66,7 +66,7 @@ compile-time error.)
 
 Now we can use this IO action as a type provider:
 
-.. code-block:: idris
+.. code-block::
 
     module Main
     -- to gain access to the IO action we're using as a provider
@@ -121,7 +121,7 @@ out we can.
 With mkForeign, we can turn a C function into an IO action. It works
 like this:
 
-.. code-block:: idris
+.. code-block::
 
     getSizeT : IO Int
     getSizeT = mkForeign (FFun "sizeof_size_t" [] FInt)
@@ -149,7 +149,7 @@ need to follow when using it.
 
 This does not work:
 
-.. code-block:: idris
+.. code-block::
 
   intIntToInt : String -> Int -> Int -> IO Int
   intIntToInt name = mkForeign (FFun name [FInt, FInt] FInt)
@@ -165,13 +165,13 @@ don't have to be literals or even known at compile time; they just
 have to be there. For example, if we have ``strlen : String -> IO
 Int``, then this is fine:
 
-.. code-block:: idris
+.. code-block::
 
    strlen str = mkForeign (FFun "strlen" [FString] FInt) str
 
 but this is not fine:
 
-.. code-block:: idris
+.. code-block::
 
    strlen = mkForeign (FFun "strlen" [FString] FInt)
 
@@ -180,7 +180,7 @@ Note that this only applies to places where you literally typed
 function returning an IO action, and it doesn't need to be fully
 applied. This is okay:
 
-.. code-block:: idris
+.. code-block::
 
    lengths : IO [Int]
    lengths = mapM strlen listOfStrings
@@ -201,7 +201,7 @@ as the REPL or a type provider), we need to dynamically link a library
 containing the symbols we need. This is pretty easy to do with the
 ``%dynamic`` directive:
 
-.. code-block:: idris
+.. code-block::
 
     %dynamic "./filename.so"
 
@@ -219,7 +219,7 @@ In an executable
 If we want to run our code from an executable, we can statically link
 instead. We'll use the ``%include`` and ``%link`` directives:
 
-.. code-block:: idris
+.. code-block::
 
     %include C "filename.h"
     %link C "filename.o"
@@ -248,7 +248,7 @@ First, let's write a C file containing functions that we'll bind to.
 
 Next, an Idris file to define our providers:
 
-.. code-block:: idris
+.. code-block::
 
     -- Providers.idr
     module Providers
@@ -276,7 +276,7 @@ Next, an Idris file to define our providers:
 Finally, we'll write one more idris file where we use the type
 providers:
 
-.. code-block:: idris
+.. code-block::
 
     -- Main.idr
     module Main
