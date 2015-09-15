@@ -92,7 +92,7 @@ declaration for ``List``, we used an infix operator ``::``. New
 operators such as this can be added using a fixity declaration, as
 follows:
 
-::
+.. code-block:: idris
 
     infixr 10 ::
 

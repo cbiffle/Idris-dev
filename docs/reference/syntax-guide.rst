@@ -19,7 +19,7 @@ Source files consist of:
 
 For example:
 
-.. code:: idris
+.. code-block:: idris
 
     module MyModule   -- module header
 
@@ -83,7 +83,7 @@ value on the next line, using the syntax
 
 Examples
 
-.. code:: idris
+.. code-block:: idris
 
     x : Int
     x = 100
@@ -97,14 +97,14 @@ In Idris, types are first class values. So a type declaration is the
 same as just declaration of a variable whose type is ``Type``. In Idris,
 variables that denote a type must begin with a capital letter. Example:
 
-.. code:: idris
+.. code-block:: idris
 
     MyIntType : Type
     MyIntType = Int
 
 a more interesting example:
 
-.. code:: idris
+.. code-block:: idris
 
     MyListType : Type
     MyListType = List Int
@@ -117,13 +117,13 @@ Data types
 Idris provides two kinds of syntax for defining data types. The first,
 Haskell style syntax, defines a regular algebraic data type. For example
 
-.. code:: idris
+.. code-block:: idris
 
     data Either a b = Left a | Right b
 
 or
 
-.. code:: idris
+.. code-block:: idris
 
     data List a = Nil | (::) a (List a)
 
@@ -132,7 +132,7 @@ GADT style syntax. This syntax defines a data type that is parameterised
 by some values (in the ``Vect`` example, a value of type ``Nat`` and a
 value of type ``Type``).
 
-.. code:: idris
+.. code-block:: idris
 
     data Vect : Nat -> Type -> Type where
       Nil  : Vect Z a
@@ -210,14 +210,14 @@ followed by the definition.
 
 Example
 
-.. code:: idris
+.. code-block:: idris
 
     plusOne : Int -> Int
     plusOne x = x + 1
 
 Functions can also have multiple inputs, for example
 
-.. code:: idris
+.. code-block:: idris
 
     makeHello : String -> String -> String
     makeHello first last = "hello, my name is " ++ first ++ " " ++ last
@@ -227,7 +227,7 @@ annotate parameters in a docstring. The following shows the same
 ``makeHello`` function as above, but with named parameters which are
 also annotated in the docstring
 
-.. code:: idris
+.. code-block:: idris
 
     ||| Makes a string introducing a person
     ||| @first The person's first name
@@ -238,7 +238,7 @@ also annotated in the docstring
 Like Haskell, Idris functions can be defined by pattern matching. For
 example
 
-.. code:: idris
+.. code-block:: idris
 
     sum : List Int -> Int
     sum []        = 0
@@ -246,7 +246,7 @@ example
 
 Similarly case analysis looks like
 
-.. code:: idris
+.. code-block:: idris
 
     answerString : Bool -> String
     answerString False = "Wrong answer"
@@ -260,7 +260,7 @@ depends on the input value. In order to define a dependent function,
 named parameters must be used, since the parameter will appear in the
 return type. For example, consider
 
-.. code:: idris
+.. code-block:: idris
 
     zeros : (n : Nat) -> Vect n Int
     zeros Z     = []

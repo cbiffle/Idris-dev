@@ -100,7 +100,7 @@ Foreign Functions
 It's actually pretty easy to write a C function that figures out the
 size of ``size_t``:
 
-.. code:: c
+.. code-block:: c
 
     int sizeof_size_t() { return sizeof(size_t); }
 
