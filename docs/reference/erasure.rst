@@ -77,7 +77,7 @@ arithmetic on the indices whenever arithmetic is done on the binary
 numbers themselves. Hence the real representation of the number 15
 looks like this:
 
-::
+.. code-block:: none
 
     I -> I -> I -> I -> N
     S    S    S    Z
@@ -123,7 +123,7 @@ Consider the type of U-views of lists:
 For better intuition, the shape of the U-view of
 ``[x0,x1,x2,z,y2,y1,y0]`` looks like this:
 
-::
+.. code-block:: none
 
       x0   y0    (two)
       x1   y1    (two)

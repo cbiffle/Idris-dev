@@ -13,11 +13,15 @@ First we define a module ``Foo.idr``
     plusAssoc : plus n (plus m o) = plus (plus n m) o
     plusAssoc = ?rhs
 
-We wish to perform induction on ``n``. First we load the file into the Idris ``REPL`` as follows::
+We wish to perform induction on ``n``. First we load the file into the Idris ``REPL`` as follows:
+
+.. code-block:: none
 
     $ idris Foo.idr
 
-We will be given the following prompt, in future releases the version string will differ::
+We will be given the following prompt, in future releases the version string will differ:
+
+.. code-block:: none
 
          ____    __     _
         /  _/___/ /____(_)____
@@ -37,7 +41,9 @@ Explore the Context
 
 We start the interactive session by asking Idris to prove the
 hole ``rhs`` using the command ``:p rhs``. Idris by default
-will show us the initial context. This looks as follows::
+will show us the initial context. This looks as follows:
+
+.. code-block:: none
 
     *Foo> :p rhs
     ----------                 Goal:                  ----------
@@ -50,7 +56,9 @@ will show us the initial context. This looks as follows::
 Application of Intros
 =====================
 
-We first apply the ``intros`` tactic::
+We first apply the ``intros`` tactic:
+
+.. code-block:: none
 
     -Foo.rhs> intros
     ----------              Other goals:              ----------
@@ -68,7 +76,9 @@ We first apply the ``intros`` tactic::
 Induction on ``n``
 ==================
 
-Then apply ``induction`` on to ``n``::
+Then apply ``induction`` on to ``n``:
+
+.. code-block:: none
 
     -Foo.rhs> induction n
     ----------              Other goals:              ----------
@@ -88,7 +98,7 @@ Then apply ``induction`` on to ``n``::
 Compute
 =======
 
-::
+.. code-block:: none
 
     -Foo.rhs> compute
     ----------              Other goals:              ----------
@@ -107,7 +117,7 @@ Compute
 Trivial
 =======
 
-::
+.. code-block:: none
 
     -Foo.rhs> trivial
     ----------              Other goals:              ----------
@@ -127,7 +137,7 @@ Trivial
 Intros
 ======
 
-::
+.. code-block:: none
 
     -Foo.rhs> intros
     ----------              Other goals:              ----------
@@ -150,7 +160,7 @@ Intros
 Compute
 =======
 
-::
+.. code-block:: none
 
     -Foo.rhs> compute
     ----------              Other goals:              ----------
@@ -173,7 +183,7 @@ Compute
 Rewrite
 =======
 
-::
+.. code-block:: none
 
     -Foo.rhs> rewrite ihn__0
     ----------              Other goals:              ----------
@@ -196,7 +206,7 @@ Rewrite
 Trivial
 =======
 
-::
+.. code-block:: none
 
     -Foo.rhs> trivial
     rhs: No more goals.

@@ -192,7 +192,7 @@ This (admittedly contrived) module defines two functions with fully
 qualified names ``foo.x.test`` and ``foo.y.test``, which can be
 disambiguated by their types:
 
-::
+.. code-block:: none
 
     *foo> test 3
     6 : Int
@@ -215,7 +215,7 @@ The effect of a ``parameters`` block is to add the declared parameters
 to every function, type and data constructor within the block. Outside
 the block, the parameters must be given explicitly:
 
-::
+.. code-block:: none
 
     *params> :t addAll
     addAll : Nat -> Nat -> Nat -> Nat
@@ -237,7 +237,7 @@ To use ``Vects`` or ``append`` outside the block, we must also give the
 ``xs`` and ``y`` arguments. Here, we can use placeholders for the values
 which can be inferred by the type checker:
 
-::
+.. code-block:: none
 
     *params> show (append _ _ (MkVects _ [1,2,3] [4,5,6]))
     "[1, 2, 3, 4, 5, 6]" : String

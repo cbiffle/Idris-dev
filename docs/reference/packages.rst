@@ -20,7 +20,9 @@ A package description includes the following:
 At least one field must be the modules field, where the value is a
 comma separated list of modules.  For example, a library test which
 has two modules ``foo.idr`` and ``bar.idr`` as source files would be
-written as follows::
+written as follows:
+
+.. code-block:: none
 
     package foo
 
@@ -96,6 +98,8 @@ Given an Idris package file ``text.ipkg`` it can be used with the Idris compiler
 
 Once the test package has been installed, the command line option
 ``--package test`` makes it accessible (abbreviated to ``-p test``).
-For example::
+For example:
 
-    idris -p test Main.idr
+.. code-block:: none
+
+    $ idris -p test Main.idr

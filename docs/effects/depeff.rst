@@ -80,7 +80,7 @@ digits). As a first attempt, we could try the following, returning a
 Unfortunately, this will not type check because the vector does not get
 extended in both branches of the ``case``!
 
-::
+.. code-block:: none
 
     MutState.idr:18:19:When elaborating right hand side of Main.case
     block in readInt:
@@ -234,7 +234,7 @@ for writing) then we will get a compile-time error. For example,
 changing ``open name Read`` to ``open name Write`` yields a compile-time
 error of the following form:
 
-::
+.. code-block:: none
 
     FileTest.idr:16:18:When elaborating right hand side of Main.case
     block in testFile:

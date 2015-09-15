@@ -18,7 +18,9 @@ At least one field must be the modules field, where the value is a
 comma separated list of modules.  For example, given an idris package
 ``maths`` that has modules ``Maths.idr``, ``Maths.NumOps.idr``,
 ``Maths.BinOps.idr``, and ``Maths.HexOps.idr``, the corresponding
-package file would be::
+package file would be:
+
+.. code-block:: none
 
     package maths
 
@@ -60,6 +62,8 @@ Given an Idris package file ``maths.ipkg`` it can be used with the Idris compile
 
 Once the maths package has been installed, the command line option
 ``--package maths`` makes it accessible (abbreviated to ``-p maths``).
-For example::
+For example:
+
+.. code-block:: none
 
     idris -p maths Main.idr

@@ -31,7 +31,7 @@ The REPL provides a number of commands, which we will describe
 shortly, which generate new program fragments based on the currently
 loaded module. These take the general form
 
-::
+.. code-block:: none
 
     :command [line number] [name]
 
@@ -39,7 +39,7 @@ That is, each command acts on a specific source line, at a specific
 name, and outputs a new program fragment. Each command has an
 alternative form, which *updates* the source file in-place:
 
-::
+.. code-block:: none
 
     :command! [line number] [name]
 
@@ -48,7 +48,7 @@ accepts and responds to REPL commands, using ``idris --client``. For
 example, if we have a REPL running elsewhere, we can execute commands
 such as:
 
-::
+.. code-block:: none
 
     $ idris --client ':t plus'
     Prelude.Nat.plus : Nat -> Nat -> Nat

@@ -20,7 +20,7 @@ Downloading and Installing
 The easiest way to install Idris, if you have all of the
 prerequisites, is to type:
 
-::
+.. code-block:: none
 
     cabal update; cabal install idris
 
@@ -53,7 +53,7 @@ details later. You can compile the program to an executable by
 entering ``idris hello.idr -o hello`` at the shell prompt. This will
 create an executable called ``hello``, which you can run:
 
-::
+.. code-block:: none
 
     $ idris hello.idr -o hello
     $ ./hello

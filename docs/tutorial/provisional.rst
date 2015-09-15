@@ -32,7 +32,7 @@ parity of ``k+2`` is the same as the parity of ``k``. Explicitly marking
 the value of ``n`` is even and odd is necessary to help type inference.
 Unfortunately, the type checker rejects this:
 
-::
+.. code-block:: none
 
     viewsbroken.idr:12:10:When elaborating right hand side of ViewsBroken.parity:
     Type mismatch between 

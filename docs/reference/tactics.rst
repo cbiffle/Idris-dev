@@ -33,7 +33,7 @@ Compute
 -  ``compute`` - Normalises all terms in the goal (note: does not
    normalise assumptions)
 
-::
+.. code-block:: none
 
     ----------                 Goal:                  ----------
      (Vect (S (S Z + (S Z) + (S n))) Nat) -> Vect (S (S (S (S n)))) Nat
@@ -47,7 +47,7 @@ Exact
 
 -  ``exact`` - Provide a term of the goal type directly.
 
-::
+.. code-block:: none
 
     ----------                 Goal:                  ----------
      Nat
@@ -67,7 +67,7 @@ Trivial
 -  ``trivial`` - Satisfies the goal using an assumption that matches its
    type.
 
-::
+.. code-block:: none
 
     ----------              Assumptions:              ----------
      value : Nat
@@ -83,7 +83,7 @@ Intro
 -  ``intro`` - If your goal is an arrow, turns the left term into an
    assumption.
 
-::
+.. code-block:: none
 
     ----------                 Goal:                  ----------
      Nat -> Nat -> Nat
@@ -96,7 +96,7 @@ Intro
 
 You can also supply your own name for the assumption:
 
-::
+.. code-block:: none
 
     ----------                 Goal:                  ----------
     Nat -> Nat -> Nat
@@ -113,7 +113,7 @@ Intros
 -  ``intros`` - Exactly like intro, but it operates on all left terms at
    once.
 
-::
+.. code-block:: none
 
     ----------                 Goal:                  ----------
      Nat -> Nat -> Nat
@@ -131,7 +131,7 @@ let
 -  ``let`` - Introduces a new assumption; you may use current
    assumptions to define the new one.
 
-::
+.. code-block:: none
 
     ----------              Assumptions:              ----------
      n : Nat
@@ -152,7 +152,7 @@ rewrite
    replaces all instances of x in the goal with y. Is often useful in
    combination with 'sym'.
 
-::
+.. code-block:: none
 
     ----------              Assumptions:              ----------
      n : Nat

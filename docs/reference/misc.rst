@@ -21,7 +21,7 @@ Names can be defined in separate namespaces, and disambiguated by type.
 An expression ``with NAME EXPR`` will privilege the namespace ``NAME``
 in the expression ``EXPR``. For example:
 
-::
+.. code-block:: none
 
     Idris> with List [[1,2],[3,4],[5,6]]
     [[1, 2], [3, 4], [5, 6]] : List (List Integer)
@@ -40,7 +40,7 @@ The syntax ``(| option1, option2, option3, ... |)`` type checks each
 of the options in turn until one of them works. This is used, for
 example, when translating integer literals.
 
-::
+.. code-block:: none
 
     Idris> the Nat (| "foo", Z, (-3) |)
     0 : Nat

@@ -41,7 +41,7 @@ implementations of the function for a specific type. For example, the
         show Z = "Z"
         show (S k) = "s" ++ show k
 
-::
+.. code-block:: none
 
     Idris> show (S (S (S Z)))
     "sssZ" : String
@@ -178,7 +178,7 @@ example to apply a function to every element in a ``List``:
       map f []      = []
       map f (x::xs) = f x :: map f xs
 
-::
+.. code-block:: none
 
     Idris> map (*2) [1..10]
     [2, 4, 6, 8, 10, 12, 14, 16, 18, 20] : List Integer
@@ -240,7 +240,7 @@ are both available, or return ``Nothing`` if one or both are not ("fail fast"). 
 ``Nothing`` cases is achieved by the ``>>=`` operator, hidden by the
 ``do`` notation.
 
-::
+.. code-block:: none
 
     *classes> m_add (Just 20) (Just 22)
     Just 42 : Maybe Int
@@ -483,7 +483,7 @@ Given the following list:
 We can sort it using the default ``Ord`` instance, then the named
 instance ``myord`` as follows, at the Idris prompt:
 
-::
+.. code-block:: none
 
     *named_instance> show (sort testList)
     "[sO, sssO, ssssO]" : String

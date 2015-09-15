@@ -313,13 +313,13 @@ C Target
 
 The default target of Idris is C. Compiling via :
 
-::
+.. code-block:: none
 
     $ idris hello.idr -o hello
 
 is equivalent to :
 
-::
+.. code-block:: none
 
     $ idris --codegen C hello.idr -o hello
 
@@ -328,7 +328,7 @@ is then compiled into an executable named ``hello``.
 
 In order to view the generated C code, compile via :
 
-::
+.. code-block:: none
 
     $ idris hello.idr -S -o hello.c
 
@@ -361,7 +361,7 @@ Code Generation
 Code generation is split into two separate targets. To generate code
 that is tailored for running in the browser issue the following command:
 
-::
+.. code-block:: none
 
     $ idris --codegen javascript hello.idr -o hello.js
 
@@ -371,7 +371,7 @@ The resulting file can be embedded into your HTML just like any other
 Generating code for *NodeJS* is slightly different. Idris outputs a
 *JavaScript* file that can be directly executed via ``node``.
 
-::
+.. code-block:: none
 
     $ idris --codegen node hello.idr -o hello
     $ ./hello
@@ -510,7 +510,7 @@ Cumulativity
 Since values can appear in types and *vice versa*, it is natural that
 types themselves have types. For example:
 
-::
+.. code-block:: none
 
     *universe> :t Nat
     Nat : Type
@@ -519,7 +519,7 @@ types themselves have types. For example:
 
 But what about the type of ``Type``? If we ask Idris it reports
 
-::
+.. code-block:: none
 
     *universe> :t Type
     Type : Type 1

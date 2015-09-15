@@ -55,7 +55,7 @@ levels are supported.
 
 Example initialisation script
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-::
+.. code-block:: none
 
     :colour prompt white italic bold
     :colour implicit magenta italic
@@ -175,7 +175,7 @@ the type, it can be helpful to use the operator ``the`` to manually
 provide one, as Idris's syntax does not allow for direct type
 annotations. Examples of ``the`` include:
 
-::
+.. code-block:: none
 
     Idris> the Nat 4
     4 : Nat
@@ -189,7 +189,7 @@ annotations. Examples of ``the`` include:
 This may not work in cases where the expression still involves ambiguous
 names. The name can be disambiguated by using the ``with`` keyword:
 
-::
+.. code-block:: none
 
     Idris> sum [1,2,3]
     When elaborating an application of function Prelude.Foldable.sum:
@@ -206,7 +206,7 @@ To add a let binding to the REPL, use ``:let``. It's likely you'll also
 need to provide a type annotation. ``:let`` also works for other
 declarations as well, such as ``data``.
 
-::
+.. code-block:: none
 
     Idris> :let x : String; x = "hello"
     Idris> x
@@ -223,7 +223,7 @@ Additionally, if used with an overloaded name, Idris will provide all
 overloadings and their types. To ask for the type of an infix operator,
 surround it in parentheses.
 
-::
+.. code-block:: none
 
     Idris> :t "foo"
     "foo" : String
@@ -238,7 +238,7 @@ surround it in parentheses.
 
 You can also ask for basic information about typeclasses with ``:doc``:
 
-::
+.. code-block:: none
 
     Idris> :doc Monad
     Type class Monad
@@ -261,7 +261,7 @@ You can also ask for basic information about typeclasses with ``:doc``:
 
 Other documentation is also available from ``:doc``:
 
-::
+.. code-block:: none
 
     Idris> :doc (+)
     Prelude.Classes.+ : (a : Type) -> (Num a) -> a -> a -> a
@@ -273,7 +273,7 @@ Other documentation is also available from ``:doc``:
             __pi_arg : a
             __pi_arg1 : a
 
-::
+.. code-block:: none
 
     Idris> :doc Vect
     Data type Prelude.Vect.Vect : Nat -> Type -> Type
@@ -295,7 +295,7 @@ Other documentation is also available from ``:doc``:
             a
             Vect n a
 
-::
+.. code-block:: none
 
     Idris> :doc Monad
     Type class Prelude.Monad.Monad
@@ -316,7 +316,7 @@ Finding things
 The command ``:apropos`` searches names, types, and documentation for
 some string, and prints the results. For example:
 
-::
+.. code-block:: none
 
     Idris> :apropos eq
     eqPtr : Ptr -> Ptr -> IO Bool
@@ -406,7 +406,7 @@ some string, and prints the results. For example:
 
 ``:search`` does a type-based search, in the spirit of Hoogle. See `Type-directed search (:search) <https://github.com/idris-lang/Idris-dev/wiki/Type-directed-search-%28%3Asearch%29>`_ for more details. Here is an example:
 
-::
+.. code-block:: none
 
     Idris> :search a -> b -> a
     = Prelude.Basics.const : a -> b -> a
@@ -430,7 +430,7 @@ some string, and prints the results. For example:
 
 ``:search`` can also look for dependent types:
 
-::
+.. code-block:: none
 
     Idris> :search plus (S n) n = plus n (S n)
     < Prelude.Nat.plusSuccRightSucc : (left : Nat) ->
@@ -498,19 +498,19 @@ allow it to work on Windows as well.
 If you do not like the default colours, they can be turned off using the
 command
 
-::
+.. code-block:: none
 
     :colour off
 
 and, when boredom strikes, they can be re-enabled using the command
 
-::
+.. code-block:: none
 
     :colour on
 
 To modify a colour, use the command
 
-::
+.. code-block:: none
 
     :colour <CATEGORY> <OPTIONS>
 

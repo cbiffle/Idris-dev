@@ -61,7 +61,9 @@ A simple test module, with a qualified name of ``Test.NumOps`` can be declared a
 
 
 The functions ``assertEq`` and ``assertNotEq`` are used to run expected passing, and failing, equality tests.
-The actual tests are ``testDouble`` and ``testTriple``, and are declared in the ``maths.ipkg`` file as follows::
+The actual tests are ``testDouble`` and ``testTriple``, and are declared in the ``maths.ipkg`` file as follows:
+
+.. code-block:: none
 
     package maths
 
@@ -72,7 +74,9 @@ The actual tests are ``testDouble`` and ``testTriple``, and are declared in the 
           , Test.NumOps.testTriple
 
 
-The testing framework can then be invoked using ``idris --testpkg maths.ipkg``::
+The testing framework can then be invoked using ``idris --testpkg maths.ipkg``:
+
+.. code-block:: none
 
     > idris --testpkg maths.ipkg
     Type checking ./Maths/NumOps.idr

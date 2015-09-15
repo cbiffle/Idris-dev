@@ -85,7 +85,7 @@ The type ``4 = 5`` is a perfectly valid type, but is uninhabited, so
 when trying to type check this definition, Idris gives the following
 error:
 
-::
+.. code-block:: none
 
     When elaborating right hand side of four_eq_five:
     Type mismatch between

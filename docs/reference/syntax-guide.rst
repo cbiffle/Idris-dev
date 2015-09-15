@@ -76,7 +76,7 @@ Variables
 A variable is always defined by defining its type on one line, and its
 value on the next line, using the syntax
 
-::
+.. code-block:: none
 
     <id> : <type>
     <id> = <value>
@@ -144,7 +144,7 @@ Operators
 Arithmetic
 ~~~~~~~~~~
 
-::
+.. code-block:: none
 
     x + y
     x - y
@@ -155,7 +155,7 @@ Arithmetic
 Equality and Relational
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-::
+.. code-block:: none
 
     x == y
     x /= y
@@ -167,7 +167,7 @@ Equality and Relational
 Conditional
 ~~~~~~~~~~~
 
-::
+.. code-block:: none
 
     x && y
     x || y
@@ -179,14 +179,14 @@ Conditionals
 If Then Else
 ~~~~~~~~~~~~
 
-::
+.. code-block:: none
 
     if <test> then <true> else <false>
 
 Case Expressions
 ~~~~~~~~~~~~~~~~
 
-::
+.. code-block:: none
 
     case <test> of
         <case 1>  => <expr>
@@ -203,7 +203,7 @@ Named
 Named functions are defined in the same way as variables, with the type
 followed by the definition.
 
-::
+.. code-block:: none
 
     <id> : <argument type> -> <return type>
     <id> arg = <expr>
@@ -270,7 +270,7 @@ In this example, the return type is ``Vect n Int`` which is an
 expression which depends on the input parameter ``n``. ### Anonymous
 Arguments in anonymous functions are separated by comma.
 
-::
+.. code-block:: none
 
     (\x => <expr>)
     (\x, y => <expr>)
@@ -281,7 +281,7 @@ Modifiers
 Visibility
 ^^^^^^^^^^
 
-::
+.. code-block:: none
 
     public
     abstract
@@ -290,7 +290,7 @@ Visibility
 Totality
 ^^^^^^^^
 
-::
+.. code-block:: none
 
     total
     implicit
@@ -300,7 +300,7 @@ Totality
 Options
 ^^^^^^^
 
-::
+.. code-block:: none
 
     %export
     %hint
@@ -319,7 +319,7 @@ Misc
 Comments
 ~~~~~~~~
 
-::
+.. code-block:: none
 
     -- Single Line
     {- Multiline -}
@@ -328,7 +328,7 @@ Comments
 Multi line String literals
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-::
+.. code-block:: none
 
     foo = """
     this is a
@@ -339,7 +339,7 @@ Multi line String literals
 Directives
 ----------
 
-::
+.. code-block:: none
 
     %lib <path>
     %link <path>

@@ -53,7 +53,7 @@ arithmetic and comparison operators, which we can use at the prompt.
 Evaluating things at the prompt gives an answer, and the type of the
 answer. For example:
 
-::
+.. code-block:: none
 
     *prims> 6*6+6
     42 : Int
@@ -66,7 +66,7 @@ will discuss in Section :ref:`sect-classes` and can be extended to
 work on user defined types. Boolean expressions can be tested with the
 ``if...then...else`` construct, for example:
 
-::
+.. code-block:: none
 
     *prims> if x == 6 * 6 + 6 then "The answer!" else "Not the answer"
     "The answer!" : String
@@ -101,7 +101,7 @@ infix operators as names. They may be used in prefix form if enclosed
 in brackets, e.g. ``(::)``. Infix operators can use any of the
 symbols:
 
-::
+.. code-block:: none
 
     :+-*\/=.?|&><!@$%^~#
 
@@ -140,7 +140,7 @@ names must begin with a capital letter or not. Function names
 all part of the same namespace. We can test these functions at the
 Idris prompt:
 
-::
+.. code-block:: none
 
     Idris> plus (S (S Z)) (S (S Z))
     4 : Nat
@@ -154,7 +154,7 @@ Idris prompt:
     is actually ``(S (S (S (S Z))))`` which is the Integer 4. This can be
     checked at the Idris prompt:
 
-::
+.. code-block:: none
 
     Idris> (S (S (S (S Z))))
     4 : Nat
@@ -162,7 +162,7 @@ Idris prompt:
 Like arithmetic operations, integer literals are also overloaded using
 type classes, meaning that we can also test the functions as follows:
 
-::
+.. code-block:: none
 
     Idris> plus 2 2
     4 : Nat
@@ -345,7 +345,7 @@ For example:
 When run through the Idris type checker, this results in the
 following:
 
-::
+.. code-block:: none
 
     $ idris vbroken.idr --check
     vbroken.idr:9:23:When elaborating right hand side of Vect.++:
@@ -716,7 +716,7 @@ double an integer:
 the function ``map`` can be used as follows to double every element in
 the vector:
 
-::
+.. code-block:: none
 
     *usefultypes> show (map double intVec)
     "[2, 4, 6, 8, 10]" : String
@@ -743,7 +743,7 @@ Aside: Anonymous functions and operator sections
 There are actually neater ways to write the above expression. One way
 would be to use an anonymous function:
 
-::
+.. code-block:: none
 
     *usefultypes> show (map (\x => x * 2) intVec)
     "[2, 4, 6, 8, 10]" : String
@@ -755,7 +755,7 @@ e.g. ``\x, y, z => val``. Arguments may also be given explicit types,
 e.g. ``\x : Int => x * 2``, and can pattern match,
 e.g. ``\(x, y) => x + y``. We could also use an operator section:
 
-::
+.. code-block:: none
 
     *usefultypes> show (map (* 2) intVec)
     "[2, 4, 6, 8, 10]" : String
@@ -924,7 +924,7 @@ following the `where` keyword (here, ``firstName``, ``middleName``,
 single line, provided that they have the same type.  The field names
 can be used to access the field values:
 
-::
+.. code-block:: none
 
     *record> firstName fred
     "Fred" : String
@@ -966,7 +966,7 @@ length because it will not affect the type of the record:
     addStudent : Person -> Class -> Class
     addStudent p c = record { students = p :: students c } c
 
-::
+.. code-block:: none
 
     *record> addStudent fred (ClassInfo [] "CS")
     ClassInfo [MkPerson "Fred" "Joe" "Bloggs" 30] "CS" : Class
@@ -1067,7 +1067,7 @@ List comprehensions
 Idris provides *comprehension* notation as a convenient shorthand
 for building lists. The general form is:
 
-::
+.. code-block:: none
 
     [ expression | qualifiers ]
 
@@ -1123,7 +1123,7 @@ bounds:
 If the index is in bounds, we get the value at that index, otherwise
 we get a default value:
 
-::
+.. code-block:: none
 
     *usefultypes> lookup_default 2 [3,4,5,6] (-1)
     5 : Integer

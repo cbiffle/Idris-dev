@@ -149,7 +149,7 @@ Internally, Idris checks every definition for totality, and we can check at
 the prompt with the ``:total`` command. We see that neither of the above
 definitions is total:
 
-::
+.. code-block:: none
 
     *theorems> :total empty1
     possibly not total due to: empty1#hd
@@ -168,7 +168,7 @@ will be a compile time error for the totality check to fail:
     total empty2 : Void
     empty2 = empty2
 
-::
+.. code-block:: none
 
     Type checking ./theorems.idr
     theorems.idr:25:empty2 is possibly not total due to recursive path empty2

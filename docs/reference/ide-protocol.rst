@@ -17,7 +17,9 @@ A reply can consist of multiple messages: any number of messages to inform the u
 The wire format is the length of the message in characters, encoded in 6 characters hexadecimal, followed by the message encoded as S-expression (sexp).
 Additionally, each request includes a unique integer (counting upwards), which is repeated in all messages corresponding to that request.
 
-An example interaction from loading the file ``/home/hannes/empty.idr`` looks as follows on the wire:::
+An example interaction from loading the file ``/home/hannes/empty.idr`` looks as follows on the wire:
+
+.. code-block:: none
 
   00002a((:load-file "/home/hannes/empty.idr") 1)
   000039(:write-string "Type checking /home/hannes/empty.idr" 1)
@@ -32,7 +34,9 @@ The answer, starting with ``:return`` is ``ok``, and additional information is t
 
 There are three atoms in the wire language: numbers, strings, and symbols.
 The only compound object is a list, which is surrounded by parenthesis.
-The syntax is::
+The syntax is:
+
+.. code-block:: none
 
   A ::= NUM | '"' STR '"' | ':' ALPHA+
   S ::= A | '(' S* ')' | nil
@@ -113,23 +117,31 @@ The available commands include:
 
 
 
-Possible replies include a normal final reply:::
+Possible replies include a normal final reply:
+
+.. code-block:: none
 
  (:return (:ok SEXP [HIGHLIGHTING]))
  (:return (:error String [HIGHLIGHTING]))
 
-A normal intermediate reply:::
+A normal intermediate reply:
+
+.. code-block:: none
 
  (:output (:ok SEXP [HIGHLIGHTING]))
  (:output (:error String [HIGHLIGHTING]))
 
-Informational and/or abnormal replies:::
+Informational and/or abnormal replies:
+
+.. code-block:: none
 
   (:write-string String)
   (:set-prompt String)
   (:warning (FilePath (LINE COL) (LINE COL) String [HIGHLIGHTING]))
 
-Proof mode replies:::
+Proof mode replies:
+
+.. code-block:: none
 
   (:start-proof-mode)
   (:write-proof-state [String] [HIGHLIGHTING])
@@ -193,7 +205,9 @@ Idris supports instructing editors how to colour their code.
 When elaborating source code or REPL input, Idris will locate regions of the source code corresponding to names, and emit information about these names using the same metadata as output highlighting.
 
 These messages will arrive as replies to the command that caused elaboration to occur, such as ``:load-file`` or ``:interpret``.
-They have the format:::
+They have the format:
+
+.. code-block:: none
 
   (:output (:ok (:highlight-source POSNS)))
 

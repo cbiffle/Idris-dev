@@ -170,7 +170,9 @@ where the Idris libs reside relative to the idris executable. The
 IDRIS_TOOLCHAIN_DIR environment variable is optional, if that is set,
 Idris will use that path to find the C compiler.
 
-Example::
+Example:
+
+.. code-block:: none
 
    IDRIS_LIB_DIR="./libs" IDRIS_TOOLCHAIN_DIR="./mingw/bin" CABALFLAGS="-fffi -ffreestanding -frelease" make
 

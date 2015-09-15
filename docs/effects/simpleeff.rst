@@ -563,7 +563,7 @@ has been generated:
 If we try this without extending the effects list, we would see an
 error something like the following:
 
-::
+.. code-block:: none
 
     Expr.idr:28:6:When elaborating right hand side of eval:
     Can't solve goal
